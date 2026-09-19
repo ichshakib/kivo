@@ -14,4 +14,6 @@ minimumReleaseAgeExclude:
   - expo-router@57.0.22
   - expo@57.0.24
 allowBuilds:
+  electron: true
+  esbuild: true
   unrs-resolver: true
