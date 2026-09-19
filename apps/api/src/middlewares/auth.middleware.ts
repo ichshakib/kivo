@@ -2,9 +2,13 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { ENV } from '../config/env';
 import { users } from '../config/passport';
-import { User } from '../types/user';
+import { ApiError } from '../utils/ApiError';
 
-export function ensureAuthenticated(req: Request, res: Response, next: NextFunction): void {
+export function ensureAuthenticated(
+  req: Request,
+  _res: Response,
+  next: NextFunction
+): void {
   // 1. Check Passport session authentication
   if (req.isAuthenticated && req.isAuthenticated()) {
     return next();
@@ -16,25 +20,27 @@ export function ensureAuthenticated(req: Request, res: Response, next: NextFunct
     const token = authHeader.split(' ')[1];
     if (token) {
       try {
-        const decoded = jwt.verify(token, ENV.JWT_SECRET) as { id: string; email: string };
+        const decoded = jwt.verify(token, ENV.JWT_SECRET) as {
+          id: string;
+          email: string;
+        };
         const user = users.get(decoded.id);
         if (user) {
           req.user = user;
           return next();
         }
       } catch {
-        res.status(401).json({
-          error: 'Invalid or expired authentication token',
-          status: 'unauthorized',
-        });
-        return;
+        return next(
+          new ApiError(401, 'Invalid or expired authentication token')
+        );
       }
     }
   }
 
-  res.status(401).json({
-    error: 'Authentication required. Please sign in via Google OAuth.',
-    status: 'unauthorized',
-    loginUrl: '/api/auth/google',
-  });
+  return next(
+    new ApiError(
+      401,
+      'Authentication required. Please sign in via Google OAuth.'
+    )
+  );
 }

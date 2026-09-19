@@ -16,3 +16,6 @@ export const ENV = {
     CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:5000/api/auth/google/callback',
   },
 };
+
+export const { PORT, NODE_ENV, CLIENT_URL, SESSION_SECRET, JWT_SECRET, GOOGLE } = ENV;
+

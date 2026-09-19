@@ -3,16 +3,20 @@ import passport from 'passport';
 import jwt from 'jsonwebtoken';
 import { ENV } from '../config/env';
 import { User } from '../types/user';
+import { ApiError } from '../utils/ApiError';
+import { ApiResponse } from '../utils/ApiResponse';
+import { asyncHandler } from '../utils/asyncHandler';
 
 export const authController = {
   // 1. Initiate Google OAuth
   googleLogin: (req: Request, res: Response, next: NextFunction) => {
     if (!ENV.GOOGLE.CLIENT_ID || !ENV.GOOGLE.CLIENT_SECRET) {
-      res.status(500).json({
-        error: 'Google OAuth credentials not configured in server environment (.env).',
-        status: 'misconfigured',
-      });
-      return;
+      return next(
+        new ApiError(
+          500,
+          'Google OAuth credentials not configured in server environment (.env).'
+        )
+      );
     }
     passport.authenticate('google', {
       scope: ['profile', 'email'],
@@ -47,15 +51,21 @@ export const authController = {
         );
 
         // Check if request expects JSON (e.g. mobile app with headers or query param)
-        const format = req.query.format || (req.headers.accept?.includes('application/json') ? 'json' : 'redirect');
+        const format =
+          req.query.format ||
+          (req.headers.accept?.includes('application/json') ? 'json' : 'redirect');
 
         if (format === 'json') {
-          return res.json({
-            success: true,
-            message: 'Successfully authenticated with Google',
-            user,
-            token,
-          });
+          return res.status(200).json(
+            new ApiResponse(
+              200,
+              {
+                user,
+                token,
+              },
+              'Successfully authenticated with Google'
+            )
+          );
         }
 
         // Redirect to Web/Client app with auth token
@@ -68,20 +78,22 @@ export const authController = {
   },
 
   // 3. Get Current User Profile
-  getMe: (req: Request, res: Response) => {
+  getMe: asyncHandler(async (req: Request, res: Response) => {
     if (!req.user) {
-      res.status(401).json({
-        authenticated: false,
-        user: null,
-      });
-      return;
+      throw new ApiError(401, 'Unauthorized: No active session');
     }
 
-    res.json({
-      authenticated: true,
-      user: req.user,
-    });
-  },
+    return res.status(200).json(
+      new ApiResponse(
+        200,
+        {
+          authenticated: true,
+          user: req.user,
+        },
+        'Current user retrieved successfully'
+      )
+    );
+  }),
 
   // 4. Logout User
   logout: (req: Request, res: Response, next: NextFunction) => {
@@ -94,22 +106,27 @@ export const authController = {
           return next(sessionErr);
         }
         res.clearCookie('connect.sid');
-        return res.json({
-          success: true,
-          message: 'Successfully logged out',
-        });
+        return res.status(200).json(
+          new ApiResponse(200, null, 'Successfully logged out')
+        );
       });
     });
   },
 
   // 5. Auth Service Status
-  getStatus: (req: Request, res: Response) => {
-    res.json({
-      provider: 'google',
-      configured: Boolean(ENV.GOOGLE.CLIENT_ID && ENV.GOOGLE.CLIENT_SECRET),
-      callbackUrl: ENV.GOOGLE.CALLBACK_URL,
-      clientUrl: ENV.CLIENT_URL,
-      status: 'ready',
-    });
-  },
+  getStatus: asyncHandler(async (_req: Request, res: Response) => {
+    return res.status(200).json(
+      new ApiResponse(
+        200,
+        {
+          provider: 'google',
+          configured: Boolean(ENV.GOOGLE.CLIENT_ID && ENV.GOOGLE.CLIENT_SECRET),
+          callbackUrl: ENV.GOOGLE.CALLBACK_URL,
+          clientUrl: ENV.CLIENT_URL,
+          status: 'ready',
+        },
+        'Auth service status retrieved'
+      )
+    );
+  }),
 };

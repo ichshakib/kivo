@@ -1,10 +1,12 @@
 import cors from 'cors';
-import express, { Express, Request, Response } from 'express';
+import express, { Express } from 'express';
 import session from 'express-session';
 import passport from 'passport';
 import { ENV } from './config/env';
 import { configurePassport } from './config/passport';
-import authRoutes from './routes/auth.routes';
+import morganMiddleware from './logger/morgan.logger';
+import router from './routes';
+import { errorHandler } from './middlewares/error.middleware';
 
 export function createApp(): Express {
   const app = express();
@@ -31,7 +33,10 @@ export function createApp(): Express {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  // 4. Session middleware for Passport
+  // 4. HTTP Request Logger (Morgan -> Winston)
+  app.use(morganMiddleware);
+
+  // 5. Session middleware for Passport
   app.use(
     session({
       secret: ENV.SESSION_SECRET,
@@ -46,35 +51,20 @@ export function createApp(): Express {
     })
   );
 
-  // 5. Passport middleware
+  // 6. Passport middleware
   app.use(passport.initialize());
   app.use(passport.session());
 
-  // 6. Routes
-  app.get('/', (req: Request, res: Response) => {
-    res.json({
-      name: 'Kivo API',
-      version: '1.0.0',
-      status: 'online',
-      timestamp: new Date().toISOString(),
-      auth: {
-        googleLogin: '/api/auth/google',
-        status: '/api/auth/status',
-        me: '/api/auth/me',
-      },
-    });
-  });
+  // 7. Routes (mounted at root and /api)
+  app.use('/', router);
+  app.use('/api', router);
+  app.use('/api/v1', router);
 
-  app.get('/api/health', (req: Request, res: Response) => {
-    res.json({
-      status: 'healthy',
-      uptime: process.uptime(),
-      timestamp: new Date().toISOString(),
-    });
-  });
-
-  // Mount Auth Routes
-  app.use('/api/auth', authRoutes);
+  // 8. Central Error Handling Middleware (must be registered after routes)
+  app.use(errorHandler);
 
   return app;
 }
+
+export const app = createApp();
+export default app;
