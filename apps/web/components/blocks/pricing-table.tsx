@@ -1,15 +1,11 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Check, ChevronsUpDown, X } from "lucide-react";
+import { Check, ChevronsUpDown, X } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Button } from '@/components/ui/button';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 interface FeatureSection {
   category: string;
@@ -23,93 +19,93 @@ interface FeatureSection {
 
 const pricingPlans = [
   {
-    name: "Free",
+    name: 'Free',
     button: {
-      text: "Get started",
-      variant: "outline" as const,
+      text: 'Get started',
+      variant: 'outline' as const,
     },
   },
   {
-    name: "Startup",
+    name: 'Startup',
     button: {
-      text: "Get started",
-      variant: "outline" as const,
+      text: 'Get started',
+      variant: 'outline' as const,
     },
   },
   {
-    name: "Enterprise",
+    name: 'Enterprise',
     button: {
-      text: "Get a demo",
-      variant: "outline" as const,
+      text: 'Get a demo',
+      variant: 'outline' as const,
     },
   },
 ];
 
 const comparisonFeatures: FeatureSection[] = [
   {
-    category: "Usage",
+    category: 'Usage',
     features: [
       {
-        name: "Members",
-        free: "Unlimited",
-        startup: "Unlimited",
-        enterprise: "Unlimited",
+        name: 'Members',
+        free: 'Unlimited',
+        startup: 'Unlimited',
+        enterprise: 'Unlimited',
       },
       {
-        name: "Transactions",
-        free: "250",
-        startup: "Unlimited",
-        enterprise: "Unlimited",
+        name: 'Transactions',
+        free: '250',
+        startup: 'Unlimited',
+        enterprise: 'Unlimited',
       },
       {
-        name: "Teams",
-        free: "2",
-        startup: "Unlimited",
-        enterprise: "Unlimited",
+        name: 'Teams',
+        free: '2',
+        startup: 'Unlimited',
+        enterprise: 'Unlimited',
       },
     ],
   },
   {
-    category: "Features",
+    category: 'Features',
     features: [
       {
-        name: "Reporting",
+        name: 'Reporting',
         free: true,
         startup: true,
         enterprise: true,
       },
       {
-        name: "Analytics",
+        name: 'Analytics',
         free: true,
         startup: true,
         enterprise: true,
       },
       {
-        name: "Import and export",
+        name: 'Import and export',
         free: true,
         startup: true,
         enterprise: true,
       },
       {
-        name: "Integrations",
+        name: 'Integrations',
         free: true,
         startup: true,
         enterprise: true,
       },
       {
-        name: "Mainline AI",
+        name: 'Mainline AI',
         free: null,
         startup: true,
         enterprise: true,
       },
       {
-        name: "Admin roles",
+        name: 'Admin roles',
         free: null,
         startup: null,
         enterprise: true,
       },
       {
-        name: "Audit log",
+        name: 'Audit log',
         free: null,
         startup: null,
         enterprise: true,
@@ -117,22 +113,22 @@ const comparisonFeatures: FeatureSection[] = [
     ],
   },
   {
-    category: "Support",
+    category: 'Support',
     features: [
       {
-        name: "Priority Support",
+        name: 'Priority Support',
         free: true,
         startup: true,
         enterprise: true,
       },
       {
-        name: "Account Manager",
+        name: 'Account Manager',
         free: null,
         startup: null,
         enterprise: true,
       },
       {
-        name: "Uptime SLA",
+        name: 'Uptime SLA',
         free: null,
         startup: null,
         enterprise: true,
@@ -166,10 +162,7 @@ export const PricingTable = () => {
   return (
     <section className="pb-28 lg:py-32">
       <div className="container">
-        <PlanHeaders
-          selectedPlan={selectedPlan}
-          onPlanChange={setSelectedPlan}
-        />
+        <PlanHeaders selectedPlan={selectedPlan} onPlanChange={setSelectedPlan} />
         <FeatureSections selectedPlan={selectedPlan} />
       </div>
     </section>
@@ -193,17 +186,12 @@ const PlanHeaders = ({
         <Collapsible open={isOpen} onOpenChange={setIsOpen} className="">
           <div className="flex items-center justify-between border-b py-4">
             <CollapsibleTrigger className="flex items-center gap-2">
-              <h3 className="text-2xl font-semibold">
-                {currentPlan.name}
-              </h3>
+              <h3 className="text-2xl font-semibold">{currentPlan.name}</h3>
               <ChevronsUpDown
-                className={`size-5 transition-transform ${isOpen ? "rotate-180" : ""}`}
+                className={`size-5 transition-transform ${isOpen ? 'rotate-180' : ''}`}
               />
             </CollapsibleTrigger>
-            <Button
-              variant={currentPlan.button.variant}
-              className="w-fit"
-            >
+            <Button variant={currentPlan.button.variant} className="w-fit">
               {currentPlan.button.text}
             </Button>
           </div>
@@ -222,7 +210,7 @@ const PlanHeaders = ({
                   >
                     {plan.name}
                   </Button>
-                ),
+                )
             )}
           </CollapsibleContent>
         </Collapsible>
@@ -257,31 +245,22 @@ const FeatureSections = ({ selectedPlan }: { selectedPlan: number }) => (
             key={featureIndex}
             className="text-foreground grid grid-cols-2 font-medium max-md:border-b md:grid-cols-4"
           >
-            <span className="inline-flex items-center py-4">
-              {feature.name}
-            </span>
+            <span className="inline-flex items-center py-4">{feature.name}</span>
             {/* Mobile View - Only Selected Plan */}
             <div className="md:hidden">
               <div className="flex items-center gap-1 py-4 md:border-b">
                 {renderFeatureValue(
-                  [feature.free, feature.startup, feature.enterprise][
-                    selectedPlan
-                  ],
+                  [feature.free, feature.startup, feature.enterprise][selectedPlan]
                 )}
               </div>
             </div>
             {/* Desktop View - All Plans */}
             <div className="hidden md:col-span-3 md:grid md:grid-cols-3 md:gap-4">
-              {[feature.free, feature.startup, feature.enterprise].map(
-                (value, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center gap-1 border-b py-4"
-                  >
-                    {renderFeatureValue(value)}
-                  </div>
-                ),
-              )}
+              {[feature.free, feature.startup, feature.enterprise].map((value, i) => (
+                <div key={i} className="flex items-center gap-1 border-b py-4">
+                  {renderFeatureValue(value)}
+                </div>
+              ))}
             </div>
           </div>
         ))}

@@ -1,9 +1,4 @@
-import type {
-  Request,
-  Response,
-  NextFunction,
-  ErrorRequestHandler,
-} from 'express';
+import type { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
 import logger from '../logger/winston.logger';
 import { ApiError } from '../utils/ApiError';
 import { NODE_ENV } from '../config/env';
@@ -35,12 +30,7 @@ const errorHandler: ErrorRequestHandler = (
     const statusCode = maybeErr?.statusCode ? maybeErr.statusCode : 500;
     const message = maybeErr?.message ?? 'Something went wrong';
 
-    error = new ApiError(
-      statusCode,
-      message,
-      maybeErr?.errors ?? [],
-      maybeErr?.stack
-    );
+    error = new ApiError(statusCode, message, maybeErr?.errors ?? [], maybeErr?.stack);
   }
 
   // Shape the response; include stack only in development

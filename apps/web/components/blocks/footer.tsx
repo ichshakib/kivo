@@ -1,24 +1,24 @@
-import Link from "next/link";
+import Link from 'next/link';
 
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 
 export function Footer() {
   const navigation = [
-    { name: "Product", href: "/#feature-modern-teams" },
-    { name: "About Us", href: "/about" },
-    { name: "Pricing", href: "/pricing" },
-    { name: "FAQ", href: "/faq" },
-    { name: "Contact", href: "/contact" },
+    { name: 'Product', href: '/#feature-modern-teams' },
+    { name: 'About Us', href: '/about' },
+    { name: 'Pricing', href: '/pricing' },
+    { name: 'FAQ', href: '/faq' },
+    { name: 'Contact', href: '/contact' },
   ];
 
   const social = [
-    { name: "Xwitter", href: "https://x.com/ausrobdev" },
-    { name: "LinkedIn", href: "#" },
+    { name: 'Xwitter', href: 'https://x.com/ausrobdev' },
+    { name: 'LinkedIn', href: '#' },
   ];
 
-  const legal = [{ name: "Privacy Policy", href: "/privacy" }];
+  const legal = [{ name: 'Privacy Policy', href: '/privacy' }];
 
   return (
     <footer className="flex flex-col items-center gap-14 pt-28 lg:pt-32">
@@ -27,14 +27,11 @@ export function Footer() {
           Start your free trial today
         </h2>
         <p className="text-muted-foreground mx-auto max-w-xl leading-snug text-balance">
-          Mainline is the fit-for-purpose tool for planning and building modern
-          software products.
+          Mainline is the fit-for-purpose tool for planning and building modern software products.
         </p>
         <div>
           <Button size="lg" className="mt-4" asChild>
-            <a href="https://github.com/shadcnblocks/mainline-nextjs-template">
-              Get template
-            </a>
+            <a href="https://github.com/shadcnblocks/mainline-nextjs-template">Get template</a>
           </Button>
         </div>
       </div>
@@ -43,10 +40,7 @@ export function Footer() {
         <ul className="flex flex-wrap items-center justify-center gap-6">
           {navigation.map((item) => (
             <li key={item.name}>
-              <Link
-                href={item.href}
-                className="font-medium transition-opacity hover:opacity-75"
-              >
+              <Link href={item.href} className="font-medium transition-opacity hover:opacity-75">
                 {item.name}
               </Link>
             </li>

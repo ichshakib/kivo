@@ -1,13 +1,13 @@
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image';
+import Link from 'next/link';
 
-import { FcGoogle } from "react-icons/fc";
+import { FcGoogle } from 'react-icons/fc';
 
-import { Background } from "@/components/background";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
+import { Background } from '@/components/background';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
 
 const Login = () => {
   return (
@@ -25,26 +25,17 @@ const Login = () => {
                   className="mb-7 dark:invert"
                 />
                 <p className="mb-2 text-2xl font-bold">Welcome back</p>
-                <p className="text-muted-foreground">
-                  Please enter your details.
-                </p>
+                <p className="text-muted-foreground">Please enter your details.</p>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-4">
                   <Input type="email" placeholder="Enter your email" required />
                   <div>
-                    <Input
-                      type="password"
-                      placeholder="Enter your password"
-                      required
-                    />
+                    <Input type="password" placeholder="Enter your password" required />
                   </div>
                   <div className="flex justify-between">
                     <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="remember"
-                        className="border-muted-foreground"
-                      />
+                      <Checkbox id="remember" className="border-muted-foreground" />
                       <label
                         htmlFor="remember"
                         className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"

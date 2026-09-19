@@ -4,15 +4,16 @@
 
 # Kivo
 
-**A high-performance modern monorepo powering web, mobile, documentation, and backend services.**
+**A high-performance modern monorepo powering web, desktop, mobile, documentation, and backend API services.**
 
 [![Turborepo](https://img.shields.io/badge/Turborepo-2.x-000000?logo=turborepo&logoColor=white)](https://turborepo.org)
 [![Next.js](https://img.shields.io/badge/Next.js-16.x-black?logo=next.js&logoColor=white)](https://nextjs.org)
+[![Electron](https://img.shields.io/badge/Electron-30.x-47848F?logo=electron&logoColor=white)](https://electronjs.org)
 [![Expo](https://img.shields.io/badge/Expo-57.x-000020?logo=expo&logoColor=white)](https://expo.dev)
 [![React Native](https://img.shields.io/badge/React_Native-0.86-61DAFB?logo=react&logoColor=black)](https://reactnative.dev)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
+[![TypeScript](https://img.shields.io/badge/TypeScript-7.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![pnpm](https://img.shields.io/badge/pnpm-11.x-F69220?logo=pnpm&logoColor=white)](https://pnpm.io)
-[![Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?logo=prettier&logoColor=white)](https://prettier.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
 </div>
@@ -21,7 +22,7 @@
 
 ## 📌 Overview
 
-**Kivo** is built as an end-to-end fullstack ecosystem managed with **Turborepo** and **pnpm workspaces**. It brings together web, native mobile, documentation, shared UI design systems, and backend services in a unified repository.
+**Kivo** is an enterprise-grade fullstack ecosystem engineered with **Turborepo** and **pnpm workspaces**. It brings together web applications, native desktop applications, cross-platform mobile apps, developer documentation portals, shared UI design systems, and modular backend API services in a unified, type-safe repository.
 
 ---
 
@@ -30,35 +31,37 @@
 ```
 kivo/
 ├── apps/
-│   ├── web/               # Next.js 16 Web Application (Port 3000)
-│   ├── mobile/            # Expo & React Native Mobile App (iOS / Android / Web)
+│   ├── web/               # Next.js 16 Web Application with Tailwind CSS v4 & Lucide (Port 3000)
+│   ├── desktop/           # Electron 30 + Vite + React 19 Desktop Client
+│   ├── mobile/            # Expo SDK 57 & React Native Mobile App (iOS / Android / Web)
 │   ├── docs/              # Next.js 16 Documentation Portal (Port 3001)
-│   └── api/               # Node.js / TypeScript Backend API Service
+│   └── api/               # Express 5 + Winston/Morgan + Passport.js Google OAuth Backend Service
 ├── packages/
-│   ├── ui/                # Shared React Component Library (@repo/ui)
-│   ├── typescript-config/ # Monorepo tsconfig presets (@repo/typescript-config)
-│   └── eslint-config/     # Monorepo ESLint configurations (@repo/eslint-config)
+│   ├── ui/                # Shared 60+ shadcn UI Component Library (@repo/ui)
+│   ├── typescript-config/ # Monorepo TypeScript presets (@repo/typescript-config)
+│   └── eslint-config/     # Monorepo ESLint presets (@repo/eslint-config)
 ├── assets/                # Official brand identity & vector assets
-├── .github/               # GitHub issue templates, PR template & workflows
-└── .vscode/               # Workspace settings & recommended extensions
+├── .github/               # Issue templates, PR template & automated CI workflows
+└── .vscode/               # Recommended workspace settings & extensions
 ```
 
 ---
 
 ## 🚀 Applications & Packages
 
-### 📱 Apps
+### 📱 Applications
 
-| Application  | Technology                             | Description                         | Dev Command                  | Port                    |
-| :----------- | :------------------------------------- | :---------------------------------- | :--------------------------- | :---------------------- |
-| **`web`**    | Next.js 16 (App Router), React 19      | Primary web interface               | `pnpm --filter web dev`      | `http://localhost:3000` |
-| **`mobile`** | Expo SDK 57, React Native, Expo Router | Cross-platform mobile app           | `pnpm --filter mobile start` | Metro Bundler           |
-| **`docs`**   | Next.js 16 (App Router), React 19      | Product and developer documentation | `pnpm --filter docs dev`     | `http://localhost:3001` |
-| **`api`**    | Node.js, TypeScript                    | Backend service scaffold            | `pnpm --filter api dev`      | Configurable            |
+| Application   | Technology Stack                                   | Description                                            | Dev Command                  | Port / Output           |
+| :------------ | :------------------------------------------------- | :----------------------------------------------------- | :--------------------------- | :---------------------- |
+| **`web`**     | Next.js 16 (App Router), React 19, Tailwind CSS v4 | High-performance responsive web client                 | `pnpm --filter web dev`      | `http://localhost:3000` |
+| **`desktop`** | Electron 30, Vite 5, React 19, Tailwind CSS v4     | Native cross-platform desktop application              | `pnpm --filter desktop dev`  | Electron Desktop Window |
+| **`mobile`**  | Expo SDK 57, React Native 0.86, Expo Router        | Cross-platform mobile app (iOS, Android, Web)          | `pnpm --filter mobile start` | Expo Metro Bundler      |
+| **`docs`**    | Next.js 16 (App Router), React 19                  | Product, architecture, and developer documentation     | `pnpm --filter docs dev`     | `http://localhost:3001` |
+| **`api`**     | Express 5, TypeScript, Winston/Morgan, Passport.js | REST API service with Google OAuth & Vercel serverless | `pnpm --filter api dev`      | `http://localhost:5000` |
 
 ### 📦 Shared Packages
 
-- **`@repo/ui`**: Shared UI component system consumed across web and documentation apps.
+- **`@repo/ui`**: Centralized component library featuring 60+ shadcn UI components built with OKLCH theme tokens, accessible primitives, and Tailwind CSS v4 compatibility.
 - **`@repo/typescript-config`**: Centralized TypeScript configurations (`base.json`, `nextjs.json`, `react-library.json`).
 - **`@repo/eslint-config`**: Shared ESLint rules (`base`, `next-js`, `react-internal`).
 
@@ -66,10 +69,10 @@ kivo/
 
 ## 🛠️ Prerequisites
 
-Make sure you have the following installed on your machine:
+Ensure the following tools are installed on your environment:
 
 - **Node.js**: `>= 24.0.0`
-- **pnpm**: `>= 11.0.0` (Enable via `corepack enable pnpm` or install globally)
+- **pnpm**: `>= 11.0.0` (Enable via `corepack enable pnpm` or install globally via `npm install -g pnpm`)
 
 ---
 
@@ -90,23 +93,29 @@ pnpm install
 
 ### 3. Start development servers
 
-Run all applications concurrently:
+Run all applications and services in parallel:
 
 ```bash
 pnpm dev
 ```
 
-Or run a specific application:
+Or target individual applications:
 
 ```bash
-# Start Web app
+# Start Web client
 pnpm --filter web dev
 
-# Start Docs app
-pnpm --filter docs dev
+# Start Desktop client
+pnpm --filter desktop dev
 
 # Start Mobile app
 pnpm --filter mobile start
+
+# Start Documentation
+pnpm --filter docs dev
+
+# Start Backend API
+pnpm --filter api dev
 ```
 
 ---
@@ -125,7 +134,7 @@ pnpm --filter mobile start
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please follow these steps:
+We welcome contributions from the community! Please read our [Contributing Guide](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md) before submitting pull requests.
 
 1. Fork the project.
 2. Create your feature branch (`git checkout -b feature/amazing-feature`).
@@ -133,16 +142,17 @@ Contributions are welcome! Please follow these steps:
 4. Push to the branch (`git push origin feature/amazing-feature`).
 5. Open a Pull Request using our [PR Template](.github/pull_request_template.md).
 
-For bugs and feature requests, please use the [Issue Templates](.github/ISSUE_TEMPLATE/).
-
 ---
 
 ## 📬 Contact & Support
+
+For questions, collaborations, feature proposals, or security inquiries:
 
 - **Author**: Shakib Khan
 - **GitHub**: [@ichshakib](https://github.com/ichshakib)
 - **Email**: [ichshakib@gmail.com](mailto:ichshakib@gmail.com)
 - **Repository**: [https://github.com/ichshakib/kivo](https://github.com/ichshakib/kivo)
+- **Issues & Discussions**: [GitHub Issues](https://github.com/ichshakib/kivo/issues)
 
 ---
 

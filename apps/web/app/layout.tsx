@@ -1,50 +1,45 @@
-import { Inter, DM_Sans } from "next/font/google";
-import type { Metadata } from "next";
+import { Inter, DM_Sans } from 'next/font/google';
+import type { Metadata } from 'next';
 
-import { Footer } from "@/components/blocks/footer";
-import { Navbar } from "@/components/blocks/navbar";
-import { StyleGlideProvider } from "@/components/styleglide-provider";
-import { ThemeProvider } from "@/components/theme-provider";
-import "./globals.css";
+import { Footer } from '@/components/blocks/footer';
+import { Navbar } from '@/components/blocks/navbar';
+import { StyleGlideProvider } from '@/components/styleglide-provider';
+import { ThemeProvider } from '@/components/theme-provider';
+import './globals.css';
 
 const dmSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-dm-sans",
-  display: "swap",
+  subsets: ['latin'],
+  variable: '--font-dm-sans',
+  display: 'swap',
 });
 
 const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://kivo.app"),
+  metadataBase: new URL('https://kivo.app'),
   title: {
-    default: "Kivo - Modern Document & Workspace Ecosystem",
-    template: "%s | Kivo",
+    default: 'Kivo - Modern Document & Workspace Ecosystem',
+    template: '%s | Kivo',
   },
-  description:
-    "A modern workspace template built with shadcn/ui, Tailwind & Next.js.",
+  description: 'A modern workspace template built with shadcn/ui, Tailwind & Next.js.',
   icons: {
-    icon: [
-      { url: "/favicon/favicon.ico" },
-      { url: "/favicon/favicon.svg", type: "image/svg+xml" },
-    ],
-    apple: [{ url: "/favicon/apple-touch-icon.png", sizes: "180x180" }],
+    icon: [{ url: '/favicon/favicon.ico' }, { url: '/favicon/favicon.svg', type: 'image/svg+xml' }],
+    apple: [{ url: '/favicon/apple-touch-icon.png', sizes: '180x180' }],
   },
   openGraph: {
-    title: "Kivo - Modern Document & Workspace Ecosystem",
-    description:
-      "A modern workspace template built with shadcn/ui, Tailwind & Next.js.",
-    siteName: "Kivo",
+    title: 'Kivo - Modern Document & Workspace Ecosystem',
+    description: 'A modern workspace template built with shadcn/ui, Tailwind & Next.js.',
+    siteName: 'Kivo',
     images: [
       {
-        url: "/og-image.jpg",
+        url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: "Kivo - Modern Document & Workspace Ecosystem",
+        alt: 'Kivo - Modern Document & Workspace Ecosystem',
       },
     ],
   },

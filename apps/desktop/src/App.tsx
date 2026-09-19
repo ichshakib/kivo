@@ -9,16 +9,7 @@ import {
   CardFooter,
 } from '@repo/ui/components/ui/card';
 import { Badge } from '@repo/ui/components/ui/badge';
-import {
-  Laptop,
-  Sparkles,
-  Layers,
-  Zap,
-  CheckCircle2,
-  Moon,
-  Sun,
-  Monitor,
-} from 'lucide-react';
+import { Laptop, Sparkles, Layers, Zap, CheckCircle2, Moon, Sun, Monitor } from 'lucide-react';
 
 export function App() {
   const [count, setCount] = useState(0);
@@ -30,7 +21,9 @@ export function App() {
   };
 
   return (
-    <div className={`min-h-screen bg-background text-foreground transition-colors duration-200 ${isDark ? 'dark' : ''}`}>
+    <div
+      className={`min-h-screen bg-background text-foreground transition-colors duration-200 ${isDark ? 'dark' : ''}`}
+    >
       {/* Title Bar / Header */}
       <header className="sticky top-0 z-50 flex items-center justify-between border-b bg-background/80 px-6 py-3 backdrop-blur-md">
         <div className="flex items-center gap-3">
@@ -62,11 +55,12 @@ export function App() {
             <Sparkles className="size-3.5 text-amber-500" />
             Desktop Client Ready
           </Badge>
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Welcome to Kivo Desktop
-          </h2>
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Welcome to Kivo Desktop</h2>
           <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
-            A native Electron desktop application configured with Vite, React 19, Tailwind CSS v4, and shared <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">@repo/ui</code> shadcn components.
+            A native Electron desktop application configured with Vite, React 19, Tailwind CSS v4,
+            and shared{' '}
+            <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">@repo/ui</code>{' '}
+            shadcn components.
           </p>
         </section>
 
@@ -98,11 +92,7 @@ export function App() {
               >
                 Increment
               </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setCount(0)}
-              >
+              <Button variant="outline" size="sm" onClick={() => setCount(0)}>
                 Reset
               </Button>
             </CardFooter>

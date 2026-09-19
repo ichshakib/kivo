@@ -16,13 +16,10 @@ const skip = (): boolean => {
 };
 
 // Fully-typed Morgan middleware
-const morganMiddleware = morgan(
-  ':remote-addr :method :url :status - :response-time ms',
-  {
-    stream,
-    skip,
-  }
-);
+const morganMiddleware = morgan(':remote-addr :method :url :status - :response-time ms', {
+  stream,
+  skip,
+});
 
 export default morganMiddleware;
 export { morganMiddleware };

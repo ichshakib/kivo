@@ -1,8 +1,8 @@
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image';
+import Link from 'next/link';
 
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 const About = () => {
   return (
@@ -11,8 +11,8 @@ const About = () => {
       <div className="flex flex-col gap-8 lg:gap-16 xl:gap-20">
         <ImageSection
           images={[
-            { src: "/about/1.webp", alt: "Team collaboration" },
-            { src: "/about/2.webp", alt: "Team workspace" },
+            { src: '/about/1.webp', alt: 'Team collaboration' },
+            { src: '/about/2.webp', alt: 'Team workspace' },
           ]}
           className="xl:-translate-x-10"
         />
@@ -20,13 +20,13 @@ const About = () => {
         <TextSection
           title="The team"
           paragraphs={[
-            "We started building Mainline in 2019 and launched in 2022. Every endpoint has been designed from the ground up — with no technical debt or legacy systems. We are purpose-built to power project management innovation for the next hundred years.",
+            'We started building Mainline in 2019 and launched in 2022. Every endpoint has been designed from the ground up — with no technical debt or legacy systems. We are purpose-built to power project management innovation for the next hundred years.',
             "We are 100% founder and team-owned, profitable, and we keep our team lean. Over time, this page will become more polished, but for now, we're focused on delivering for developers.",
             "If you're interested in building the future of PM, check out our open roles below.",
           ]}
           ctaButton={{
-            href: "/careers",
-            text: "View open roles",
+            href: '/careers',
+            text: 'View open roles',
           }}
         />
       </div>
@@ -41,8 +41,8 @@ const About = () => {
         />
         <ImageSection
           images={[
-            { src: "/about/3.webp", alt: "Modern workspace" },
-            { src: "/about/4.webp", alt: "Team collaboration" },
+            { src: '/about/3.webp', alt: 'Modern workspace' },
+            { src: '/about/4.webp', alt: 'Team collaboration' },
           ]}
           className="hidden lg:flex xl:translate-x-10"
         />
@@ -60,18 +60,10 @@ interface ImageSectionProps {
 
 export function ImageSection({ images, className }: ImageSectionProps) {
   return (
-    <div className={cn("flex flex-col gap-6", className)}>
+    <div className={cn('flex flex-col gap-6', className)}>
       {images.map((image, index) => (
-        <div
-          key={index}
-          className="relative aspect-[2/1.5] overflow-hidden rounded-2xl"
-        >
-          <Image
-            src={image.src}
-            alt={image.alt}
-            fill
-            className="object-cover"
-          />
+        <div key={index} className="relative aspect-[2/1.5] overflow-hidden rounded-2xl">
+          <Image src={image.src} alt={image.alt} fill className="object-cover" />
         </div>
       ))}
     </div>
@@ -87,11 +79,7 @@ interface TextSectionProps {
   };
 }
 
-export function TextSection({
-  title,
-  paragraphs,
-  ctaButton,
-}: TextSectionProps) {
+export function TextSection({ title, paragraphs, ctaButton }: TextSectionProps) {
   return (
     <section className="flex-1 space-y-4 text-lg md:space-y-6">
       {title && <h2 className="text-foreground text-4xl">{title}</h2>}

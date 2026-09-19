@@ -1,15 +1,15 @@
-import React from "react";
+import React from 'react';
 
-import Link from "next/link";
+import Link from 'next/link';
 
-import { FaFacebook, FaLinkedin, FaXTwitter } from "react-icons/fa6";
+import { FaFacebook, FaLinkedin, FaXTwitter } from 'react-icons/fa6';
 
-import { ContactForm } from "@/components/blocks/contact-form";
-import { DashedLine } from "@/components/dashed-line";
+import { ContactForm } from '@/components/blocks/contact-form';
+import { DashedLine } from '@/components/dashed-line';
 
 const contactInfo = [
   {
-    title: "Corporate office",
+    title: 'Corporate office',
     content: (
       <p className="text-muted-foreground mt-3">
         1 Carlsberg Close
@@ -19,7 +19,7 @@ const contactInfo = [
     ),
   },
   {
-    title: "Email us",
+    title: 'Email us',
     content: (
       <div className="mt-3">
         <div>
@@ -44,7 +44,7 @@ const contactInfo = [
     ),
   },
   {
-    title: "Social",
+    title: 'Social',
     content: (
       <div className="mt-3 flex gap-3">
         <Link href="#" className="text-muted-foreground hover:text-foreground">

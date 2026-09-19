@@ -12,10 +12,7 @@ export const authController = {
   googleLogin: (req: Request, res: Response, next: NextFunction) => {
     if (!ENV.GOOGLE.CLIENT_ID || !ENV.GOOGLE.CLIENT_SECRET) {
       return next(
-        new ApiError(
-          500,
-          'Google OAuth credentials not configured in server environment (.env).'
-        )
+        new ApiError(500, 'Google OAuth credentials not configured in server environment (.env).')
       );
     }
     passport.authenticate('google', {
@@ -106,9 +103,7 @@ export const authController = {
           return next(sessionErr);
         }
         res.clearCookie('connect.sid');
-        return res.status(200).json(
-          new ApiResponse(200, null, 'Successfully logged out')
-        );
+        return res.status(200).json(new ApiResponse(200, null, 'Successfully logged out'));
       });
     });
   },

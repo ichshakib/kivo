@@ -50,7 +50,12 @@ export default function RootLayout() {
           animated={true}
         />
         <AnimatedSplashOverlay />
-        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background } }} />
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            contentStyle: { backgroundColor: colors.background },
+          }}
+        />
       </ThemeProvider>
     </KeyboardProvider>
   );

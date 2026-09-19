@@ -1,24 +1,24 @@
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image';
+import Link from 'next/link';
 
-import { ChevronRight } from "lucide-react";
+import { ChevronRight } from 'lucide-react';
 
-import { DashedLine } from "../dashed-line";
+import { DashedLine } from '../dashed-line';
 
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from '@/components/ui/card';
 
 const items = [
   {
-    title: "Purpose-built for product development",
-    image: "/features/triage-card.svg",
+    title: 'Purpose-built for product development',
+    image: '/features/triage-card.svg',
   },
   {
-    title: "Manage projects end-to-end",
-    image: "/features/cycle-card.svg",
+    title: 'Manage projects end-to-end',
+    image: '/features/cycle-card.svg',
   },
   {
-    title: "Build momentum and healthy habits",
-    image: "/features/overview-card.svg",
+    title: 'Build momentum and healthy habits',
+    image: '/features/overview-card.svg',
   },
 ];
 
@@ -40,9 +40,8 @@ export const Features = () => {
             Made for modern product teams
           </h2>
           <p className="text-muted-foreground leading-snug">
-            Mainline is built on the habits that make the best product teams
-            successful: staying focused, moving quickly, and always aiming for
-            high-quality work.
+            Mainline is built on the habits that make the best product teams successful: staying
+            focused, moving quickly, and always aiming for high-quality work.
           </p>
         </div>
 
@@ -65,7 +64,7 @@ export const Features = () => {
                   <Link
                     href="#"
                     className={
-                      "group flex items-center justify-between gap-4 pe-4 pt-4 md:pe-6 md:pt-6"
+                      'group flex items-center justify-between gap-4 pe-4 pt-4 md:pe-6 md:pt-6'
                     }
                   >
                     <h3 className="font-display max-w-60 text-2xl leading-tight font-bold tracking-tight">

@@ -4,11 +4,7 @@ import { ENV } from '../config/env';
 import { users } from '../config/passport';
 import { ApiError } from '../utils/ApiError';
 
-export function ensureAuthenticated(
-  req: Request,
-  _res: Response,
-  next: NextFunction
-): void {
+export function ensureAuthenticated(req: Request, _res: Response, next: NextFunction): void {
   // 1. Check Passport session authentication
   if (req.isAuthenticated && req.isAuthenticated()) {
     return next();
@@ -30,17 +26,10 @@ export function ensureAuthenticated(
           return next();
         }
       } catch {
-        return next(
-          new ApiError(401, 'Invalid or expired authentication token')
-        );
+        return next(new ApiError(401, 'Invalid or expired authentication token'));
       }
     }
   }
 
-  return next(
-    new ApiError(
-      401,
-      'Authentication required. Please sign in via Google OAuth.'
-    )
-  );
+  return next(new ApiError(401, 'Authentication required. Please sign in via Google OAuth.'));
 }

@@ -27,7 +27,9 @@ export default function AuthScreen() {
   };
 
   return (
-    <ThemedView style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom + 16 }]}>
+    <ThemedView
+      style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom + 16 }]}
+    >
       {/* Top Branding Section */}
       <View style={styles.topSection}>
         <Animated.View entering={FadeInDown.duration(600).delay(100)} style={styles.logoContainer}>
@@ -38,7 +40,10 @@ export default function AuthScreen() {
           />
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.duration(600).delay(200)} style={styles.headerTextContainer}>
+        <Animated.View
+          entering={FadeInDown.duration(600).delay(200)}
+          style={styles.headerTextContainer}
+        >
           <ThemedText style={styles.brandTitle}>Kivo</ThemedText>
           <ThemedText style={styles.tagline}>
             Focus on what matters. Distraction-free writing and rich document editing.
@@ -47,24 +52,41 @@ export default function AuthScreen() {
       </View>
 
       {/* Middle Feature Highlights */}
-      <Animated.View entering={FadeInDown.duration(600).delay(350)} style={styles.featuresContainer}>
-        <View style={[styles.featureCard, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+      <Animated.View
+        entering={FadeInDown.duration(600).delay(350)}
+        style={styles.featuresContainer}
+      >
+        <View
+          style={[
+            styles.featureCard,
+            { backgroundColor: colors.backgroundElement, borderColor: colors.border },
+          ]}
+        >
           <View style={[styles.iconBadge, { backgroundColor: '#0085FF15' }]}>
             <Ionicons name="create-outline" size={22} color={colors.primary} />
           </View>
           <View style={styles.featureTextWrapper}>
             <ThemedText style={styles.featureTitle}>Prose & Markdown</ThemedText>
-            <ThemedText style={styles.featureSubtitle}>Rich text formatting powered by modern Tiptap</ThemedText>
+            <ThemedText style={styles.featureSubtitle}>
+              Rich text formatting powered by modern Tiptap
+            </ThemedText>
           </View>
         </View>
 
-        <View style={[styles.featureCard, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+        <View
+          style={[
+            styles.featureCard,
+            { backgroundColor: colors.backgroundElement, borderColor: colors.border },
+          ]}
+        >
           <View style={[styles.iconBadge, { backgroundColor: '#10B98115' }]}>
             <Ionicons name="cloud-done-outline" size={22} color="#10B981" />
           </View>
           <View style={styles.featureTextWrapper}>
             <ThemedText style={styles.featureTitle}>Instant Cloud Sync</ThemedText>
-            <ThemedText style={styles.featureSubtitle}>Your notes and documents ready everywhere</ThemedText>
+            <ThemedText style={styles.featureSubtitle}>
+              Your notes and documents ready everywhere
+            </ThemedText>
           </View>
         </View>
       </Animated.View>

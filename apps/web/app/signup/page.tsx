@@ -1,12 +1,12 @@
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image';
+import Link from 'next/link';
 
-import { FcGoogle } from "react-icons/fc";
+import { FcGoogle } from 'react-icons/fc';
 
-import { Background } from "@/components/background";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Background } from '@/components/background';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 
 const Signup = () => {
   return (
@@ -24,20 +24,14 @@ const Signup = () => {
                   className="mb-7 dark:invert"
                 />
                 <p className="mb-2 text-2xl font-bold">Start your free trial</p>
-                <p className="text-muted-foreground">
-                  Sign up in less than 2 minutes.
-                </p>
+                <p className="text-muted-foreground">Sign up in less than 2 minutes.</p>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-4">
                   <Input type="text" placeholder="Enter your name" required />
                   <Input type="email" placeholder="Enter your email" required />
                   <div>
-                    <Input
-                      type="password"
-                      placeholder="Enter your password"
-                      required
-                    />
+                    <Input type="password" placeholder="Enter your password" required />
                     <p className="text-muted-foreground mt-1 text-sm">
                       Must be at least 8 characters.
                     </p>
