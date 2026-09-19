@@ -1,27 +1,10 @@
-import cors from 'cors';
-import express, { Request, Response } from 'express';
+import { createApp } from './app';
+import { ENV } from './config/env';
 
-const app = express();
-const PORT = process.env.PORT || 5000;
+const app = createApp();
 
-app.use(cors());
-app.use(express.json());
-
-app.get('/', (req: Request, res: Response) => {
-  res.json({
-    message: 'Welcome to Kivo API',
-    status: 'online',
-    timestamp: new Date().toISOString(),
-  });
-});
-
-app.get('/api/health', (req: Request, res: Response) => {
-  res.json({
-    status: 'healthy',
-    uptime: process.uptime(),
-  });
-});
-
-app.listen(PORT, () => {
-  console.log(`🚀 Kivo API server running on http://localhost:${PORT}`);
+app.listen(ENV.PORT, () => {
+  console.log(`🚀 Kivo API server running on http://localhost:${ENV.PORT}`);
+  console.log(`🔑 Google Auth Endpoint: http://localhost:${ENV.PORT}/api/auth/google`);
+  console.log(`🩺 Health Check: http://localhost:${ENV.PORT}/api/health`);
 });
