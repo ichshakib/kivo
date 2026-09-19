@@ -1,3 +1,5 @@
+import { Button } from '@repo/ui/components/ui/button';
+
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-between bg-zinc-50 p-6 text-zinc-900 transition-colors duration-300 dark:bg-zinc-950 dark:text-zinc-50 sm:p-12 md:p-20">
@@ -65,22 +67,14 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Action Buttons */}
+        {/* Action Buttons using shadcn Button from @repo/ui */}
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <a
-            href="#get-started"
-            className="inline-flex h-11 items-center justify-center rounded-xl bg-zinc-900 px-6 text-sm font-medium text-white shadow-sm transition-all hover:bg-zinc-800 active:scale-95 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
-          >
+          <Button size="lg" className="rounded-xl font-medium shadow-sm active:scale-95">
             Explore Editor
-          </a>
-          <a
-            href="https://tailwindcss.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex h-11 items-center justify-center rounded-xl border border-zinc-300 bg-white/80 px-6 text-sm font-medium text-zinc-700 shadow-sm backdrop-blur-md transition-all hover:bg-zinc-100 active:scale-95 dark:border-zinc-800 dark:bg-zinc-900/80 dark:text-zinc-300 dark:hover:bg-zinc-800"
-          >
-            Tailwind Docs →
-          </a>
+          </Button>
+          <Button variant="outline" size="lg" className="rounded-xl font-medium shadow-sm backdrop-blur-md active:scale-95">
+            shadcn Component Ready
+          </Button>
         </div>
       </main>
 

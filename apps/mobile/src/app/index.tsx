@@ -88,7 +88,7 @@ export default function AuthScreen() {
         </TouchableOpacity>
 
         <ThemedText style={styles.termsText}>
-          By continuing, you agree to Kivo's Terms of Service and Privacy Policy.
+          {"By continuing, you agree to Kivo's Terms of Service and Privacy Policy."}
         </ThemedText>
       </Animated.View>
     </ThemedView>
