@@ -1,240 +1,96 @@
-import {
-  CodeBridge,
-  CoreBridge,
-  PlaceholderBridge,
-  RichText,
-  TenTapStartKit,
-  Toolbar,
-  darkEditorTheme,
-  defaultEditorTheme,
-  useEditorBridge,
-} from '@10play/tentap-editor';
-import React, { useEffect, useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { KeyboardStickyView } from 'react-native-keyboard-controller';
+import { Ionicons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
+import { useRouter } from 'expo-router';
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Colors } from '@/constants/theme';
+import { Colors, Fonts } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
-const INITIAL_CONTENT = `
-<h2>✨ Kivo Document Editor</h2>
-<p>TenTap is a typed, customizable, and extendable rich text editor for React Native based on <b>Tiptap</b> and <b>ProseMirror</b>.</p>
-<p>You can format text with ease:</p>
-<ul>
-  <li><b>Bold</b>, <i>Italic</i>, <u>Underline</u>, and <s>Strike</s></li>
-  <li>Custom bullet points, numbered lists, and quotes</li>
-  <li>Code blocks and inline syntax formatting</li>
-</ul>
-<blockquote>"Simplicity is the soul of efficiency." – Austin Freeman</blockquote>
-<pre><code>// Enjoy full-screen distraction-free writing
-const app = 'Kivo';
-console.log('Ready!');</code></pre>
-`;
+const GOOGLE_ICON_URI =
+  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="%23EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="%234285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="%23FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.79l7.97-6.2z"/><path fill="%2334A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>';
 
-export default function HomeScreen() {
+export default function AuthScreen() {
+  const router = useRouter();
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
-  const themeKey = colorScheme === 'dark' ? 'dark' : 'light';
-  const colors = Colors[themeKey];
-  const isDark = themeKey === 'dark';
+  const isDark = colorScheme === 'dark';
+  const colors = Colors[isDark ? 'dark' : 'light'];
 
-  const editorTheme = useMemo(() => {
-    const baseTheme = isDark ? darkEditorTheme : defaultEditorTheme;
-    return {
-      ...baseTheme,
-      webview: {
-        backgroundColor: colors.background,
-        flex: 1,
-      },
-      webviewContainer: {
-        backgroundColor: colors.background,
-        flex: 1,
-      },
-      toolbar: {
-        ...baseTheme.toolbar,
-        toolbarBody: {
-          ...baseTheme.toolbar.toolbarBody,
-          backgroundColor: colors.toolbarBackground,
-          borderTopWidth: 0,
-          borderBottomWidth: 0,
-          height: 48,
-          minHeight: 48,
-          maxHeight: 48,
-          flexGrow: 0,
-        },
-        toolbarButton: {
-          ...baseTheme.toolbar.toolbarButton,
-          backgroundColor: colors.toolbarBackground,
-          paddingHorizontal: 8,
-          height: 48,
-          minWidth: 40,
-          justifyContent: 'center',
-          alignItems: 'center',
-        },
-        iconWrapper: {
-          ...baseTheme.toolbar.iconWrapper,
-          backgroundColor: colors.toolbarBackground,
-          borderRadius: 6,
-        },
-        iconWrapperActive: {
-          ...baseTheme.toolbar.iconWrapperActive,
-          backgroundColor: colors.toolbarActiveBackground,
-        },
-        icon: {
-          ...baseTheme.toolbar.icon,
-          tintColor: colors.toolbarIcon,
-          width: 24,
-          height: 24,
-        },
-        iconDisabled: {
-          ...baseTheme.toolbar.iconDisabled,
-          tintColor: colors.toolbarIconDisabled,
-        },
-        linkBarTheme: {
-          ...baseTheme.toolbar.linkBarTheme,
-          addLinkContainer: {
-            ...baseTheme.toolbar.linkBarTheme.addLinkContainer,
-            backgroundColor: colors.toolbarBackground,
-            borderTopWidth: 0,
-            borderBottomWidth: 0,
-            height: 48,
-          },
-          linkInput: {
-            ...baseTheme.toolbar.linkBarTheme.linkInput,
-            backgroundColor: colors.backgroundSelected,
-            color: colors.text,
-            borderRadius: 6,
-          },
-          placeholderTextColor: colors.textPlaceholder,
-          doneButton: {
-            ...baseTheme.toolbar.linkBarTheme.doneButton,
-            backgroundColor: colors.primary,
-            borderRadius: 6,
-          },
-          doneButtonText: {
-            ...baseTheme.toolbar.linkBarTheme.doneButtonText,
-            color: colors.primaryText,
-            fontWeight: '600',
-          },
-        },
-      },
-    };
-  }, [colors, isDark]);
-
-  const customCSS = useMemo(() => {
-    return `
-      html, body {
-        background-color: ${colors.background};
-        color: ${colors.text};
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        min-height: 100%;
-        overflow-x: hidden;
-        -webkit-text-size-adjust: 100%;
-      }
-      .ProseMirror {
-        padding: 8px 16px 24px 16px;
-        min-height: 100%;
-        outline: none;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        font-size: 16px;
-        line-height: 1.6;
-        color: ${colors.text};
-        box-sizing: border-box;
-        word-break: break-word;
-      }
-      .ProseMirror > *:first-child {
-        margin-top: 0 !important;
-      }
-      .ProseMirror p.is-editor-empty:first-child::before {
-        color: ${colors.textPlaceholder};
-        content: attr(data-placeholder);
-        float: left;
-        height: 0;
-        pointer-events: none;
-      }
-      h1, h2, h3, h4, h5, h6 {
-        color: ${colors.text};
-        font-weight: 700;
-        margin-top: 1.2em;
-        margin-bottom: 0.5em;
-        line-height: 1.3;
-      }
-      blockquote {
-        border-left: 4px solid ${colors.editorBlockquoteBorder};
-        padding-left: 1rem;
-        margin: 1rem 0;
-        color: ${colors.textSecondary};
-        font-style: italic;
-      }
-      pre {
-        background-color: ${colors.editorCodeBackground};
-        border-radius: 8px;
-        padding: 12px 16px;
-        margin: 1rem 0;
-        overflow-x: auto;
-      }
-      code {
-        background-color: ${colors.editorCodeBackground};
-        border-radius: 4px;
-        padding: 2px 6px;
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-        font-size: 0.9em;
-      }
-      ul, ol {
-        padding-left: 1.5rem;
-      }
-      li {
-        margin-bottom: 0.35em;
-      }
-    `;
-  }, [colors]);
-
-  const editor = useEditorBridge({
-    autofocus: true,
-    avoidIosKeyboard: true,
-    initialContent: INITIAL_CONTENT,
-    theme: editorTheme,
-    bridgeExtensions: [
-      ...TenTapStartKit,
-      PlaceholderBridge.configureExtension({
-        placeholder: 'Start writing your document...',
-      }),
-      CodeBridge.configureCSS(`
-        pre, code {
-          background-color: ${colors.editorCodeBackground};
-          color: ${colors.text};
-        }
-      `),
-      CoreBridge.configureCSS(customCSS),
-    ],
-  });
-
-  useEffect(() => {
-    editor.injectCSS?.(customCSS);
-  }, [customCSS, editor]);
+  const handleGoogleSignIn = () => {
+    // Navigation placeholder - ready for Google Auth integration
+    router.push('/editor');
+  };
 
   return (
-    <ThemedView style={[styles.container, { paddingTop: insets.top }]}>
-      <View style={styles.editorContainer}>
-        <RichText editor={editor} style={styles.editor} />
+    <ThemedView style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom + 16 }]}>
+      {/* Top Branding Section */}
+      <View style={styles.topSection}>
+        <Animated.View entering={FadeInDown.duration(600).delay(100)} style={styles.logoContainer}>
+          <Image
+            source={require('@/assets/images/splash-icon.png')}
+            style={styles.logoImage}
+            contentFit="contain"
+          />
+        </Animated.View>
+
+        <Animated.View entering={FadeInDown.duration(600).delay(200)} style={styles.headerTextContainer}>
+          <ThemedText style={styles.brandTitle}>Kivo</ThemedText>
+          <ThemedText style={styles.tagline}>
+            Focus on what matters. Distraction-free writing and rich document editing.
+          </ThemedText>
+        </Animated.View>
       </View>
 
-      <KeyboardStickyView offset={{ closed: 0, opened: 0 }}>
-        <View
+      {/* Middle Feature Highlights */}
+      <Animated.View entering={FadeInDown.duration(600).delay(350)} style={styles.featuresContainer}>
+        <View style={[styles.featureCard, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+          <View style={[styles.iconBadge, { backgroundColor: '#0085FF15' }]}>
+            <Ionicons name="create-outline" size={22} color={colors.primary} />
+          </View>
+          <View style={styles.featureTextWrapper}>
+            <ThemedText style={styles.featureTitle}>Prose & Markdown</ThemedText>
+            <ThemedText style={styles.featureSubtitle}>Rich text formatting powered by modern Tiptap</ThemedText>
+          </View>
+        </View>
+
+        <View style={[styles.featureCard, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+          <View style={[styles.iconBadge, { backgroundColor: '#10B98115' }]}>
+            <Ionicons name="cloud-done-outline" size={22} color="#10B981" />
+          </View>
+          <View style={styles.featureTextWrapper}>
+            <ThemedText style={styles.featureTitle}>Instant Cloud Sync</ThemedText>
+            <ThemedText style={styles.featureSubtitle}>Your notes and documents ready everywhere</ThemedText>
+          </View>
+        </View>
+      </Animated.View>
+
+      {/* Bottom Auth Actions */}
+      <Animated.View entering={FadeInUp.duration(600).delay(450)} style={styles.bottomSection}>
+        <TouchableOpacity
+          activeOpacity={0.85}
+          onPress={handleGoogleSignIn}
           style={[
-            styles.toolbarContainer,
+            styles.googleButton,
             {
-              backgroundColor: colors.toolbarBackground,
+              backgroundColor: isDark ? '#FFFFFF' : '#FFFFFF',
+              borderColor: colors.border,
+              shadowColor: colors.text,
             },
           ]}
         >
-          <Toolbar editor={editor} hidden={false} />
-        </View>
-      </KeyboardStickyView>
+          <Image source={{ uri: GOOGLE_ICON_URI }} style={styles.googleIcon} contentFit="contain" />
+          <Text style={styles.googleButtonText}>Continue with Google</Text>
+        </TouchableOpacity>
+
+        <ThemedText style={styles.termsText}>
+          By continuing, you agree to Kivo's Terms of Service and Privacy Policy.
+        </ThemedText>
+      </Animated.View>
     </ThemedView>
   );
 }
@@ -242,22 +98,113 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
-    height: '100%',
+    paddingHorizontal: 24,
+    justifyContent: 'space-between',
   },
-  editorContainer: {
+  topSection: {
+    alignItems: 'center',
+    marginTop: 32,
+  },
+  logoContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 22,
+    backgroundColor: '#0085FF18',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  logoImage: {
+    width: 52,
+    height: 52,
+  },
+  headerTextContainer: {
+    alignItems: 'center',
+    paddingHorizontal: 12,
+  },
+  brandTitle: {
+    fontSize: 34,
+    fontWeight: '700',
+    letterSpacing: -0.5,
+    fontFamily: Fonts.sans,
+    marginBottom: 8,
+  },
+  tagline: {
+    fontSize: 16,
+    lineHeight: 23,
+    textAlign: 'center',
+    opacity: 0.75,
+    fontFamily: Fonts.sans,
+  },
+  featuresContainer: {
+    gap: 12,
+    marginVertical: 24,
+  },
+  featureCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    borderRadius: 16,
+    borderWidth: 1,
+  },
+  iconBadge: {
+    width: 42,
+    height: 42,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 14,
+  },
+  featureTextWrapper: {
     flex: 1,
-    width: '100%',
-    overflow: 'hidden',
   },
-  editor: {
-    flex: 1,
-    width: '100%',
-    backgroundColor: 'transparent',
+  featureTitle: {
+    fontSize: 15,
+    fontWeight: '600',
+    marginBottom: 2,
+    fontFamily: Fonts.sans,
   },
-  toolbarContainer: {
+  featureSubtitle: {
+    fontSize: 13,
+    opacity: 0.65,
+    lineHeight: 18,
+    fontFamily: Fonts.sans,
+  },
+  bottomSection: {
     width: '100%',
-    height: 48,
-    overflow: 'hidden',
+    alignItems: 'center',
+    gap: 14,
+  },
+  googleButton: {
+    width: '100%',
+    height: 54,
+    borderRadius: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  googleIcon: {
+    width: 22,
+    height: 22,
+    marginRight: 12,
+  },
+  googleButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1F2937',
+    fontFamily: Fonts.sans,
+  },
+  termsText: {
+    fontSize: 12,
+    textAlign: 'center',
+    opacity: 0.5,
+    lineHeight: 18,
+    paddingHorizontal: 16,
+    fontFamily: Fonts.sans,
   },
 });
