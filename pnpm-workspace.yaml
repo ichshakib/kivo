@@ -1,5 +1,6 @@
 packages:
-  - "apps/*"
+  - "apps/api"
+  - "apps/web"
   - "packages/*"
 minimumReleaseAgeExclude:
   - '@expo/cli@57.0.26'
