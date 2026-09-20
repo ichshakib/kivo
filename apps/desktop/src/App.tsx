@@ -1,14 +1,7 @@
 import { useState } from 'react';
-import { Moon, Sun } from 'lucide-react';
 
 export function App() {
   const [email, setEmail] = useState('');
-  const [isDark, setIsDark] = useState(true);
-
-  const toggleTheme = () => {
-    setIsDark(!isDark);
-    document.documentElement.classList.toggle('dark');
-  };
 
   const handleContinue = (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,29 +11,12 @@ export function App() {
   };
 
   return (
-    <div
-      className={`min-h-screen bg-[#111111] text-[#ededed] flex flex-col justify-between selection:bg-blue-500/30 selection:text-white transition-colors duration-200 ${isDark ? 'dark' : ''}`}
-    >
-      {/* Top Header Bar */}
-      <header className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06] bg-[#141414]/80 backdrop-blur-md">
-        <div className="flex items-center gap-2.5">
-          <div className="flex size-7 items-center justify-center rounded-lg bg-white/10 text-white border border-white/10 shadow-sm">
-            <span className="font-bold text-sm">K</span>
-          </div>
-          <span className="text-xs font-medium text-white/70 tracking-wide">Kivo Desktop</span>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <button
-            onClick={toggleTheme}
-            className="p-1.5 rounded-lg text-white/50 hover:text-white/90 hover:bg-white/[0.06] transition-colors"
-            title="Toggle theme"
-            aria-label="Toggle theme"
-          >
-            {isDark ? <Sun className="size-4" /> : <Moon className="size-4" />}
-          </button>
-        </div>
-      </header>
+    <div className="min-h-screen bg-[#111111] text-[#ededed] flex flex-col justify-between selection:bg-blue-500/30 selection:text-white">
+      {/* Native Window Titlebar Drag Region */}
+      <div
+        className="h-9 w-full flex-shrink-0 select-none"
+        style={{ WebkitAppRegion: 'drag' } as React.CSSProperties}
+      />
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
