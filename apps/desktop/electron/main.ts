@@ -6,7 +6,7 @@ import path from 'node:path';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 app.name = 'Kivo';
-app.setAppUserModelId('com.kivo.desktop');
+app.setAppUserModelId('com.kivo.workspace');
 
 // The built directory structure
 //
@@ -36,6 +36,11 @@ function createWindow() {
   win = new BrowserWindow({
     title: 'Kivo',
     icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
+    width: 1200,
+    height: 800,
+    minWidth: 800,
+    maxWidth: 1920,
+    minHeight: 600,
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
