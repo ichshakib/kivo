@@ -1,8 +1,12 @@
 import { app, BrowserWindow, Menu } from 'electron';
+import { autoUpdater } from 'electron-updater';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+app.name = 'Kivo';
+app.setAppUserModelId('com.kivo.desktop');
 
 // The built directory structure
 //
@@ -53,6 +57,16 @@ function createWindow() {
   }
 }
 
+function setupAutoUpdater() {
+  if (app.isPackaged) {
+    autoUpdater.autoDownload = true;
+    autoUpdater.autoInstallOnAppQuit = true;
+    autoUpdater.checkForUpdatesAndNotify().catch((err) => {
+      console.error('Error checking for updates:', err);
+    });
+  }
+}
+
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
@@ -71,4 +85,7 @@ app.on('activate', () => {
   }
 });
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  createWindow();
+  setupAutoUpdater();
+});
