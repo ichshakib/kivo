@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Logo } from './components/logo';
 
 export function App() {
+  const [page, setPage] = useState<'login' | 'hello'>('login');
   const [email, setEmail] = useState('');
   const [isDark, setIsDark] = useState(() => {
     if (typeof window !== 'undefined' && window.matchMedia) {
@@ -48,98 +49,127 @@ export function App() {
         style={{ WebkitAppRegion: 'drag' } as React.CSSProperties}
       />
 
-      {/* Main Content Area */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
-        <div className="w-full max-w-[420px] flex flex-col items-center">
-          {/* Standalone Kivo Logo */}
-          <Logo size={46} isDark={isDark} className="mb-6" />
+      {page === 'hello' ? (
+        /* Hello World Page */
+        <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
+          <div className="flex flex-col items-center gap-4 text-center">
+            <Logo size={52} isDark={isDark} className="mb-2" />
+            <h1
+              className={`text-4xl font-extrabold tracking-tight ${
+                isDark ? 'text-white' : 'text-gray-900'
+              }`}
+            >
+              Hello World
+            </h1>
+            <p className={`text-sm ${isDark ? 'text-[#9b9b9b]' : 'text-gray-500'}`}>
+              Welcome to your Kivo workspace
+            </p>
+            <button
+              onClick={() => setPage('login')}
+              className={`mt-4 px-4 py-2 text-xs font-medium rounded-lg transition-all cursor-pointer ${
+                isDark
+                  ? 'bg-[#1c1c1c] border border-white/[0.08] hover:bg-[#252525] text-[#d4d4d4] hover:text-white'
+                  : 'bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 hover:text-gray-900 shadow-sm'
+              }`}
+            >
+              ← Back to Login
+            </button>
+          </div>
+        </main>
+      ) : (
+        /* Login Main Content Area */
+        <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
+          <div className="w-full max-w-[420px] flex flex-col items-center">
+            {/* Standalone Kivo Logo */}
+            <Logo size={46} isDark={isDark} className="mb-6" />
 
-          {/* Heading & Subtitle */}
-          <h1
-            className={`text-2xl font-bold tracking-tight text-center mb-1.5 ${
-              isDark ? 'text-white' : 'text-[#111827]'
-            }`}
-          >
-            Your AI workspace.
-          </h1>
-          <p
-            className={`text-sm text-center mb-8 font-normal ${
-              isDark ? 'text-[#9b9b9b]' : 'text-[#6b7280]'
-            }`}
-          >
-            Log in to your Kivo account
-          </p>
+            {/* Heading & Subtitle */}
+            <h1
+              className={`text-2xl font-bold tracking-tight text-center mb-1.5 ${
+                isDark ? 'text-white' : 'text-[#111827]'
+              }`}
+            >
+              Your AI workspace.
+            </h1>
+            <p
+              className={`text-sm text-center mb-8 font-normal ${
+                isDark ? 'text-[#9b9b9b]' : 'text-[#6b7280]'
+              }`}
+            >
+              Log in to your Kivo account
+            </p>
 
-          {/* Form */}
-          <form onSubmit={handleContinue} className="w-full">
-            <div className="mb-4">
-              <label
-                htmlFor="email-input"
-                className={`block text-xs font-semibold mb-2 uppercase tracking-wider ${
-                  isDark ? 'text-[#8b8b8b]' : 'text-[#6b7280]'
-                }`}
+            {/* Form */}
+            <form onSubmit={handleContinue} className="w-full">
+              <div className="mb-4">
+                <label
+                  htmlFor="email-input"
+                  className={`block text-xs font-semibold mb-2 uppercase tracking-wider ${
+                    isDark ? 'text-[#8b8b8b]' : 'text-[#6b7280]'
+                  }`}
+                >
+                  Email
+                </label>
+                <input
+                  id="email-input"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email address..."
+                  required
+                  className={`w-full h-11 px-3.5 rounded-lg text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#0085FF]/50 focus:border-[#0085FF] ${
+                    isDark
+                      ? 'bg-[#222222]/80 border border-white/[0.12] text-white placeholder:text-[#666666]'
+                      : 'bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400 shadow-sm'
+                  }`}
+                />
+                <p
+                  className={`text-xs mt-2 leading-relaxed ${
+                    isDark ? 'text-[#707070]' : 'text-[#9ca3af]'
+                  }`}
+                >
+                  Use an organization email to easily collaborate with teammates
+                </p>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full h-11 rounded-lg bg-[#0085FF] hover:bg-[#0073e6] active:bg-[#0062c4] text-white font-medium text-sm transition-all shadow-md shadow-blue-500/10 cursor-pointer flex items-center justify-center"
               >
-                Email
-              </label>
-              <input
-                id="email-input"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email address..."
-                required
-                className={`w-full h-11 px-3.5 rounded-lg text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#0085FF]/50 focus:border-[#0085FF] ${
-                  isDark
-                    ? 'bg-[#222222]/80 border border-white/[0.12] text-white placeholder:text-[#666666]'
-                    : 'bg-white border border-gray-300 text-gray-900 placeholder:text-gray-400 shadow-sm'
+                Continue
+              </button>
+            </form>
+
+            {/* Divider */}
+            <div className="relative w-full my-7 flex items-center justify-center">
+              <div
+                className={`border-t w-full ${
+                  isDark ? 'border-white/[0.08]' : 'border-gray-200'
                 }`}
               />
-              <p
-                className={`text-xs mt-2 leading-relaxed ${
-                  isDark ? 'text-[#707070]' : 'text-[#9ca3af]'
+              <span
+                className={`px-3.5 text-xs absolute ${
+                  isDark ? 'bg-[#111111] text-[#6e6e6e]' : 'bg-[#f8f9fa] text-[#9ca3af]'
                 }`}
               >
-                Use an organization email to easily collaborate with teammates
-              </p>
+                or continue with
+              </span>
             </div>
 
-            <button
-              type="submit"
-              className="w-full h-11 rounded-lg bg-[#0085FF] hover:bg-[#0073e6] active:bg-[#0062c4] text-white font-medium text-sm transition-all shadow-md shadow-blue-500/10 cursor-pointer flex items-center justify-center"
-            >
-              Continue
-            </button>
-          </form>
-
-          {/* Divider */}
-          <div className="relative w-full my-7 flex items-center justify-center">
-            <div
-              className={`border-t w-full ${
-                isDark ? 'border-white/[0.08]' : 'border-gray-200'
-              }`}
-            />
-            <span
-              className={`px-3.5 text-xs absolute ${
-                isDark ? 'bg-[#111111] text-[#6e6e6e]' : 'bg-[#f8f9fa] text-[#9ca3af]'
-              }`}
-            >
-              or continue with
-            </span>
-          </div>
-
-          {/* OAuth & Auth Buttons Grid */}
-          <div className="w-full space-y-2.5">
-            {/* Row 1: Google, Apple, Microsoft */}
-            <div className="grid grid-cols-3 gap-2.5">
-              {/* Google */}
-              <button
-                type="button"
-                className={`flex flex-col items-center justify-center gap-2 py-3 px-3 rounded-xl border active:scale-[0.98] transition-all cursor-pointer group shadow-sm ${
-                  isDark
-                    ? 'bg-[#1c1c1c] border-white/[0.08] hover:bg-[#252525] hover:border-white/[0.16] text-[#d4d4d4] hover:text-white'
-                    : 'bg-white border-gray-200/80 hover:bg-gray-50 hover:border-gray-300 text-gray-700 hover:text-gray-900'
-                }`}
-              >
+            {/* OAuth & Auth Buttons Grid */}
+            <div className="w-full space-y-2.5">
+              {/* Row 1: Google, Apple, Microsoft */}
+              <div className="grid grid-cols-3 gap-2.5">
+                {/* Google */}
+                <button
+                  type="button"
+                  onClick={() => setPage('hello')}
+                  className={`flex flex-col items-center justify-center gap-2 py-3 px-3 rounded-xl border active:scale-[0.98] transition-all cursor-pointer group shadow-sm ${
+                    isDark
+                      ? 'bg-[#1c1c1c] border-white/[0.08] hover:bg-[#252525] hover:border-white/[0.16] text-[#d4d4d4] hover:text-white'
+                      : 'bg-white border-gray-200/80 hover:bg-gray-50 hover:border-gray-300 text-gray-700 hover:text-gray-900'
+                  }`}
+                >
                 <svg className="size-5" viewBox="0 0 24 24">
                   <path
                     fill="#4285F4"
@@ -276,10 +306,10 @@ export function App() {
             >
               Privacy Policy
             </a>
-            .
           </p>
         </div>
       </main>
+      )}
     </div>
   );
 }
