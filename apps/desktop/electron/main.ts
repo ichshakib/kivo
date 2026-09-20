@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, Menu } from 'electron';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
@@ -27,12 +27,18 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
 let win: BrowserWindow | null;
 
 function createWindow() {
+  Menu.setApplicationMenu(null);
+
   win = new BrowserWindow({
+    title: 'Kivo',
     icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
+    autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
     },
   });
+
+  win.removeMenu();
 
   // Test active push message to Renderer-process.
   win.webContents.on('did-finish-load', () => {
