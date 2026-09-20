@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Logo } from './components/logo';
 
 export function App() {
-  const [page, setPage] = useState<'login' | 'hello'>('login');
+  const [page, setPage] = useState<'login' | 'dashboard'>('login');
   const [email, setEmail] = useState('');
   const [isDark, setIsDark] = useState(() => {
     if (typeof window !== 'undefined' && window.matchMedia) {
@@ -49,33 +49,53 @@ export function App() {
         style={{ WebkitAppRegion: 'drag' } as React.CSSProperties}
       />
 
-      {page === 'hello' ? (
-        /* Hello World Page */
-        <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
-          <div className="flex flex-col items-center gap-4 text-center">
-            <Logo size={52} isDark={isDark} className="mb-2" />
-            <h1
-              className={`text-4xl font-extrabold tracking-tight ${
-                isDark ? 'text-white' : 'text-gray-900'
-              }`}
-            >
-              Hello World
-            </h1>
-            <p className={`text-sm ${isDark ? 'text-[#9b9b9b]' : 'text-gray-500'}`}>
-              Welcome to your Kivo workspace
-            </p>
-            <button
-              onClick={() => setPage('login')}
-              className={`mt-4 px-4 py-2 text-xs font-medium rounded-lg transition-all cursor-pointer ${
-                isDark
-                  ? 'bg-[#1c1c1c] border border-white/[0.08] hover:bg-[#252525] text-[#d4d4d4] hover:text-white'
-                  : 'bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 hover:text-gray-900 shadow-sm'
-              }`}
-            >
-              ← Back to Login
-            </button>
-          </div>
-        </main>
+      {page === 'dashboard' ? (
+        /* Workspace Screen with Left Sidebar & Right Main Content */
+        <div className="flex-1 flex flex-row overflow-hidden">
+          {/* Left Sidebar */}
+          <aside
+            className={`w-64 h-full flex flex-col justify-between p-4 border-r select-none transition-colors ${
+              isDark
+                ? 'bg-[#141414] border-white/[0.08] text-[#ededed]'
+                : 'bg-[#f0f2f5] border-gray-200 text-gray-800'
+            }`}
+          >
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-2.5 px-2 py-1">
+                <Logo size={22} isDark={isDark} />
+                <span className="font-semibold text-sm tracking-tight">Sidebar</span>
+              </div>
+            </div>
+
+            {/* Bottom Actions */}
+            <div className="pt-3 border-t border-inherit">
+              <button
+                type="button"
+                onClick={() => setPage('login')}
+                className={`w-full flex items-center gap-2 px-3 py-2 text-xs font-medium rounded-lg transition-all cursor-pointer ${
+                  isDark
+                    ? 'hover:bg-white/[0.06] text-[#9b9b9b] hover:text-white'
+                    : 'hover:bg-gray-200 text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                <span>← Back to Login</span>
+              </button>
+            </div>
+          </aside>
+
+          {/* Right Main Content Area */}
+          <main className="flex-1 h-full flex items-center justify-center p-8 overflow-auto">
+            <div className="text-center">
+              <h1
+                className={`text-2xl font-bold tracking-tight ${
+                  isDark ? 'text-white' : 'text-gray-900'
+                }`}
+              >
+                Main Content
+              </h1>
+            </div>
+          </main>
+        </div>
       ) : (
         /* Login Main Content Area */
         <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
@@ -163,7 +183,7 @@ export function App() {
                 {/* Google */}
                 <button
                   type="button"
-                  onClick={() => setPage('hello')}
+                  onClick={() => setPage('dashboard')}
                   className={`flex flex-col items-center justify-center gap-2 py-3 px-3 rounded-xl border active:scale-[0.98] transition-all cursor-pointer group shadow-sm ${
                     isDark
                       ? 'bg-[#1c1c1c] border-white/[0.08] hover:bg-[#252525] hover:border-white/[0.16] text-[#d4d4d4] hover:text-white'
