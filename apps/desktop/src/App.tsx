@@ -39,28 +39,27 @@ export function App() {
 
   return (
     <div
-      className={`min-h-screen flex flex-col justify-between selection:bg-blue-500/30 transition-colors duration-200 ${
+      className={`min-h-screen selection:bg-blue-500/30 transition-colors duration-200 ${
         isDark ? 'bg-[#111111] text-[#ededed] selection:text-white' : 'bg-[#f8f9fa] text-[#1a1a1a] selection:text-blue-900'
       }`}
     >
-      {/* Native Window Titlebar Drag Region */}
-      <div
-        className="h-9 w-full flex-shrink-0 select-none"
-        style={{ WebkitAppRegion: 'drag' } as React.CSSProperties}
-      />
-
       {page === 'dashboard' ? (
-        /* Workspace Screen with Left Sidebar & Right Main Content */
-        <div className="flex-1 flex flex-row overflow-hidden">
-          {/* Left Sidebar */}
+        /* Workspace Screen with Full-Height Left Sidebar & Right Main Content */
+        <div className="h-screen w-screen flex flex-row overflow-hidden">
+          {/* Full-Height Left Sidebar */}
           <aside
-            className={`w-64 h-full flex flex-col justify-between p-4 border-r select-none transition-colors ${
+            className={`w-64 h-screen flex flex-col justify-between p-4 border-r select-none transition-colors ${
               isDark
                 ? 'bg-[#141414] border-white/[0.08] text-[#ededed]'
                 : 'bg-[#f0f2f5] border-gray-200 text-gray-800'
             }`}
           >
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col">
+              {/* Drag Region spanning top of sidebar */}
+              <div
+                className="h-9 -mx-4 -mt-4 mb-2 flex-shrink-0 select-none"
+                style={{ WebkitAppRegion: 'drag' } as React.CSSProperties}
+              />
               <div className="flex items-center gap-2.5 px-2 py-1">
                 <Logo size={22} isDark={isDark} />
                 <span className="font-semibold text-sm tracking-tight">Sidebar</span>
@@ -83,25 +82,42 @@ export function App() {
             </div>
           </aside>
 
-          {/* Right Main Content Area */}
-          <main className="flex-1 h-full flex items-center justify-center p-8 overflow-auto">
-            <div className="text-center">
-              <h1
-                className={`text-2xl font-bold tracking-tight ${
-                  isDark ? 'text-white' : 'text-gray-900'
-                }`}
-              >
-                Main Content
-              </h1>
-            </div>
-          </main>
+          {/* Right Main Column (Titlebar + Main Content) */}
+          <div className="flex-1 h-screen flex flex-col overflow-hidden">
+            {/* Native Window Titlebar Drag Region for Main Area */}
+            <div
+              className="h-9 w-full flex-shrink-0 select-none"
+              style={{ WebkitAppRegion: 'drag' } as React.CSSProperties}
+            />
+
+            {/* Right Main Content Area */}
+            <main className="flex-1 flex items-center justify-center p-8 overflow-auto">
+              <div className="text-center">
+                <h1
+                  className={`text-2xl font-bold tracking-tight ${
+                    isDark ? 'text-white' : 'text-gray-900'
+                  }`}
+                >
+                  Main Content
+                </h1>
+              </div>
+            </main>
+          </div>
         </div>
       ) : (
-        /* Login Main Content Area */
-        <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
-          <div className="w-full max-w-[420px] flex flex-col items-center">
-            {/* Standalone Kivo Logo */}
-            <Logo size={46} isDark={isDark} className="mb-6" />
+        /* Login Screen with Top Drag Bar */
+        <div className="min-h-screen flex flex-col justify-between">
+          {/* Native Window Titlebar Drag Region */}
+          <div
+            className="h-9 w-full flex-shrink-0 select-none"
+            style={{ WebkitAppRegion: 'drag' } as React.CSSProperties}
+          />
+
+          {/* Login Main Content Area */}
+          <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
+            <div className="w-full max-w-[420px] flex flex-col items-center">
+              {/* Standalone Kivo Logo */}
+              <Logo size={46} isDark={isDark} className="mb-6" />
 
             {/* Heading & Subtitle */}
             <h1
@@ -329,8 +345,9 @@ export function App() {
           </p>
         </div>
       </main>
-      )}
     </div>
+  )}
+</div>
   );
 }
 
