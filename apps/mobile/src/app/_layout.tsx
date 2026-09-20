@@ -43,7 +43,7 @@ export default function RootLayout() {
   }, [colors, isDark]);
 
   return (
-    <KeyboardProvider statusBarTranslucent>
+    <KeyboardProvider>
       <ThemeProvider value={navigationTheme}>
         <AuthProvider>
           <StatusBar
