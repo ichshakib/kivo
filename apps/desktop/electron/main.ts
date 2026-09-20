@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu } from 'electron';
+import { app, BrowserWindow, Menu, nativeTheme } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
@@ -30,8 +30,28 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
 
 let win: BrowserWindow | null;
 
+function updateTitleBarTheme() {
+  if (!win || win.isDestroyed()) return;
+  const isDark = nativeTheme.shouldUseDarkColors;
+  const bg = isDark ? '#111111' : '#f8f9fa';
+  const symbol = isDark ? '#ededed' : '#111827';
+
+  if (process.platform === 'win32') {
+    win.setTitleBarOverlay({
+      color: bg,
+      symbolColor: symbol,
+      height: 36,
+    });
+  }
+  win.setBackgroundColor(bg);
+}
+
 function createWindow() {
   Menu.setApplicationMenu(null);
+
+  const isDark = nativeTheme.shouldUseDarkColors;
+  const bg = isDark ? '#111111' : '#f8f9fa';
+  const symbol = isDark ? '#ededed' : '#111827';
 
   win = new BrowserWindow({
     title: 'Kivo',
@@ -43,11 +63,11 @@ function createWindow() {
     autoHideMenuBar: true,
     titleBarStyle: 'hidden',
     titleBarOverlay: {
-      color: '#111111',
-      symbolColor: '#ededed',
+      color: bg,
+      symbolColor: symbol,
       height: 36,
     },
-    backgroundColor: '#111111',
+    backgroundColor: bg,
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
     },
@@ -99,4 +119,8 @@ app.on('activate', () => {
 app.whenReady().then(() => {
   createWindow();
   setupAutoUpdater();
+
+  nativeTheme.on('updated', () => {
+    updateTitleBarTheme();
+  });
 });
