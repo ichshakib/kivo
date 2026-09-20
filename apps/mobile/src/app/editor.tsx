@@ -9,13 +9,17 @@ import {
   defaultEditorTheme,
   useEditorBridge,
 } from '@10play/tentap-editor';
+import { Ionicons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
+import { useRouter } from 'expo-router';
 import React, { useEffect, useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { KeyboardStickyView } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedView } from '@/components/themed-view';
 import { Colors } from '@/constants/theme';
+import { useAuth } from '@/context/auth-context';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 const INITIAL_CONTENT = `
@@ -35,10 +39,17 @@ console.log('Ready!');</code></pre>
 
 export default function EditorScreen() {
   const insets = useSafeAreaInsets();
+  const router = useRouter();
+  const { user, signOut } = useAuth();
   const colorScheme = useColorScheme();
   const themeKey = colorScheme === 'dark' ? 'dark' : 'light';
   const colors = Colors[themeKey];
   const isDark = themeKey === 'dark';
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.replace('/');
+  };
 
   const editorTheme = useMemo(() => {
     const baseTheme = isDark ? darkEditorTheme : defaultEditorTheme;
@@ -219,6 +230,58 @@ export default function EditorScreen() {
 
   return (
     <ThemedView style={[styles.container, { paddingTop: insets.top }]}>
+      {/* Top Header Bar */}
+      <View
+        style={[
+          styles.headerBar,
+          {
+            backgroundColor: colors.toolbarBackground,
+            borderBottomColor: colors.border,
+          },
+        ]}
+      >
+        <TouchableOpacity
+          onPress={() => router.replace('/')}
+          style={styles.headerButton}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="arrow-back" size={20} color={colors.text} />
+        </TouchableOpacity>
+
+        <Text style={[styles.headerTitle, { color: colors.text }]} numberOfLines={1}>
+          {user ? `Workspace • ${user.name || user.email}` : 'Workspace'}
+        </Text>
+
+        {user ? (
+          <TouchableOpacity
+            onPress={handleSignOut}
+            style={[
+              styles.signOutButton,
+              { backgroundColor: isDark ? '#2B2D31' : '#E4E5E9' },
+            ]}
+            activeOpacity={0.7}
+          >
+            {user.photo ? (
+              <Image source={{ uri: user.photo }} style={styles.userAvatar} />
+            ) : (
+              <Ionicons name="person-circle-outline" size={18} color={colors.text} />
+            )}
+            <Text style={[styles.signOutText, { color: colors.textSecondary }]}>Log out</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() => router.replace('/')}
+            style={[
+              styles.signOutButton,
+              { backgroundColor: isDark ? '#2B2D31' : '#E4E5E9' },
+            ]}
+            activeOpacity={0.7}
+          >
+            <Text style={[styles.signOutText, { color: colors.textSecondary }]}>Log in</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+
       <View style={styles.editorContainer}>
         <RichText editor={editor} style={styles.editor} />
       </View>
@@ -244,6 +307,41 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
+  },
+  headerBar: {
+    height: 48,
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 12,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  headerButton: {
+    padding: 6,
+    borderRadius: 8,
+  },
+  headerTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    maxWidth: '55%',
+  },
+  signOutButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+  },
+  userAvatar: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+  },
+  signOutText: {
+    fontSize: 12,
+    fontWeight: '500',
   },
   editorContainer: {
     flex: 1,

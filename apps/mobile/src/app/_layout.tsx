@@ -8,6 +8,7 @@ import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
 import { Colors } from '@/constants/theme';
+import { AuthProvider } from '@/context/auth-context';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -44,18 +45,20 @@ export default function RootLayout() {
   return (
     <KeyboardProvider statusBarTranslucent>
       <ThemeProvider value={navigationTheme}>
-        <StatusBar
-          backgroundColor={colors.background}
-          barStyle={isDark ? 'light-content' : 'dark-content'}
-          animated={true}
-        />
-        <AnimatedSplashOverlay />
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            contentStyle: { backgroundColor: colors.background },
-          }}
-        />
+        <AuthProvider>
+          <StatusBar
+            backgroundColor={colors.background}
+            barStyle={isDark ? 'light-content' : 'dark-content'}
+            animated={true}
+          />
+          <AnimatedSplashOverlay />
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              contentStyle: { backgroundColor: colors.background },
+            }}
+          />
+        </AuthProvider>
       </ThemeProvider>
     </KeyboardProvider>
   );
