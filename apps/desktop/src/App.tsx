@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Logo } from './components/logo';
+import { PanelLeftClose, Inbox, SquarePen } from 'lucide-react';
 
 export function App() {
   const [page, setPage] = useState<'login' | 'dashboard'>('login');
@@ -55,14 +56,73 @@ export function App() {
             }`}
           >
             <div className="flex flex-col">
-              {/* Drag Region spanning top of sidebar */}
+              {/* Top Sidebar Header aligned with window titlebar */}
               <div
-                className="h-9 -mx-4 -mt-4 mb-2 flex-shrink-0 select-none"
-                style={{ WebkitAppRegion: 'drag' } as React.CSSProperties}
-              />
-              <div className="flex items-center gap-2.5 px-2 py-1">
-                <Logo size={22} isDark={isDark} />
-                <span className="font-semibold text-sm tracking-tight">Sidebar</span>
+                className="h-9 -mx-4 -mt-4 px-3 flex items-center justify-between border-b flex-shrink-0 select-none transition-colors"
+                style={
+                  {
+                    WebkitAppRegion: 'drag',
+                    borderColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
+                  } as React.CSSProperties
+                }
+              >
+                {/* Left: Logo & Toggle Sidebar */}
+                <div
+                  className="flex items-center gap-1.5"
+                  style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties}
+                >
+                  <button
+                    type="button"
+                    className={`p-1 rounded-md transition-colors cursor-pointer ${
+                      isDark
+                        ? 'hover:bg-white/[0.08] text-white'
+                        : 'hover:bg-gray-200 text-gray-800'
+                    }`}
+                    title="Kivo"
+                  >
+                    <Logo size={18} isDark={isDark} />
+                  </button>
+                  <button
+                    type="button"
+                    className={`p-1 rounded-md transition-colors cursor-pointer ${
+                      isDark
+                        ? 'hover:bg-white/[0.08] text-[#9b9b9b] hover:text-white'
+                        : 'hover:bg-gray-200 text-gray-600 hover:text-gray-900'
+                    }`}
+                    title="Toggle Sidebar"
+                  >
+                    <PanelLeftClose className="size-4" />
+                  </button>
+                </div>
+
+                {/* Right: Inbox & New Note */}
+                <div
+                  className="flex items-center gap-1"
+                  style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties}
+                >
+                  <button
+                    type="button"
+                    className={`p-1 rounded-md transition-colors cursor-pointer ${
+                      isDark
+                        ? 'hover:bg-white/[0.08] text-[#9b9b9b] hover:text-white'
+                        : 'hover:bg-gray-200 text-gray-600 hover:text-gray-900'
+                    }`}
+                    title="Inbox"
+                  >
+                    <Inbox className="size-4" />
+                  </button>
+                  <button
+                    type="button"
+                    className={`p-1 rounded-md transition-colors cursor-pointer ${
+                      isDark
+                        ? 'hover:bg-white/[0.08] text-[#9b9b9b] hover:text-white'
+                        : 'hover:bg-gray-200 text-gray-600 hover:text-gray-900'
+                    }`}
+                    title="New Note"
+                  >
+                    <SquarePen className="size-4" />
+                  </button>
+                </div>
               </div>
             </div>
 
