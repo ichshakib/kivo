@@ -6,9 +6,51 @@ import { User } from '../types/user';
 import { ApiError } from '../utils/ApiError';
 import { ApiResponse } from '../utils/ApiResponse';
 import { asyncHandler } from '../utils/asyncHandler';
+import logger from '../logger/winston.logger';
 
 export const authController = {
-  // 1. Initiate Google OAuth
+  // 1. Mobile Google Auth endpoint
+  mobileGoogleLogin: asyncHandler(async (req: Request, res: Response) => {
+    const { user, idToken } = req.body;
+
+    logger.info(
+      `[Auth] Mobile Google Sign-In: ${JSON.stringify(
+        {
+          id: user?.id,
+          email: user?.email,
+          name: user?.name,
+          photo: user?.photo,
+          hasIdToken: Boolean(idToken),
+          timestamp: new Date().toISOString(),
+        },
+        null,
+        2
+      )}`
+    );
+
+    const token = jwt.sign(
+      {
+        id: user?.id || 'mobile-user',
+        email: user?.email || '',
+        name: user?.name || '',
+      },
+      ENV.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    return res.status(200).json(
+      new ApiResponse(
+        200,
+        {
+          user: user || { id: 'mobile-user', email: user?.email, name: user?.name },
+          token,
+        },
+        'Mobile Google login logged and authenticated successfully'
+      )
+    );
+  }),
+
+  // 2. Initiate Google OAuth (Web/Browser)
   googleLogin: (req: Request, res: Response, next: NextFunction) => {
     if (!ENV.GOOGLE.CLIENT_ID || !ENV.GOOGLE.CLIENT_SECRET) {
       return next(
@@ -21,7 +63,7 @@ export const authController = {
     })(req, res, next);
   },
 
-  // 2. Google OAuth Callback
+  // 3. Google OAuth Callback (Web/Browser)
   googleCallback: (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate('google', (err: Error | null, user: User | false) => {
       if (err) {
@@ -35,6 +77,15 @@ export const authController = {
         if (loginErr) {
           return next(loginErr);
         }
+
+        logger.info(
+          `[Auth] Web Google OAuth callback: ${JSON.stringify({
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            timestamp: new Date().toISOString(),
+          })}`
+        );
 
         // Generate JWT token for cross-platform / mobile app clients
         const token = jwt.sign(
@@ -74,7 +125,7 @@ export const authController = {
     })(req, res, next);
   },
 
-  // 3. Get Current User Profile
+  // 4. Get Current User Profile
   getMe: asyncHandler(async (req: Request, res: Response) => {
     if (!req.user) {
       throw new ApiError(401, 'Unauthorized: No active session');
@@ -92,8 +143,18 @@ export const authController = {
     );
   }),
 
-  // 4. Logout User
+  // 5. Logout User
   logout: (req: Request, res: Response, next: NextFunction) => {
+    const userIdentifier =
+      req.user || req.body?.user || req.body?.email || req.body?.userId || 'Mobile/Web Client';
+
+    logger.info(
+      `[Auth] Account logged out: ${JSON.stringify({
+        user: userIdentifier,
+        timestamp: new Date().toISOString(),
+      })}`
+    );
+
     req.logout((err) => {
       if (err) {
         return next(err);

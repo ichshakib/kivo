@@ -17,12 +17,21 @@ export function createApp(): Express {
   // 2. CORS configuration (supports credentials for sessions & cross-origin cookies)
   app.use(
     cors({
-      origin: [
-        ENV.CLIENT_URL,
-        'http://localhost:3000',
-        'http://localhost:3001',
-        'http://localhost:8081',
-      ],
+      origin: (origin, callback) => {
+        // Allow mobile apps (no origin header), localhost, and local network IPs
+        if (
+          !origin ||
+          origin.startsWith('http://localhost') ||
+          origin.startsWith('http://192.168.') ||
+          origin.startsWith('http://10.') ||
+          origin.startsWith('http://127.0.0.1') ||
+          origin === ENV.CLIENT_URL
+        ) {
+          callback(null, true);
+        } else {
+          callback(null, true);
+        }
+      },
       credentials: true,
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
       allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],

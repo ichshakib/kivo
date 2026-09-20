@@ -255,10 +255,7 @@ export default function EditorScreen() {
         {user ? (
           <TouchableOpacity
             onPress={handleSignOut}
-            style={[
-              styles.signOutButton,
-              { backgroundColor: isDark ? '#2B2D31' : '#E4E5E9' },
-            ]}
+            style={[styles.signOutButton, { backgroundColor: isDark ? '#2B2D31' : '#E4E5E9' }]}
             activeOpacity={0.7}
           >
             {user.photo ? (
@@ -271,10 +268,7 @@ export default function EditorScreen() {
         ) : (
           <TouchableOpacity
             onPress={() => router.replace('/')}
-            style={[
-              styles.signOutButton,
-              { backgroundColor: isDark ? '#2B2D31' : '#E4E5E9' },
-            ]}
+            style={[styles.signOutButton, { backgroundColor: isDark ? '#2B2D31' : '#E4E5E9' }]}
             activeOpacity={0.7}
           >
             <Text style={[styles.signOutText, { color: colors.textSecondary }]}>Log in</Text>

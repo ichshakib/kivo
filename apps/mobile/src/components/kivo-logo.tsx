@@ -9,16 +9,12 @@ interface KivoLogoProps {
 
 export function KivoLogo({ size = 48, isDark = true }: KivoLogoProps) {
   const iconSource = isDark
-    ? require('@/assets/icons/icon-dark.png')
-    : require('@/assets/icons/icon.png');
+    ? require('@/assets/icons/kivo-logo-dark-transparent.png')
+    : require('@/assets/icons/kivo-logo-light-transparent.png');
 
   return (
     <View style={[styles.container, { width: size, height: size }]}>
-      <Image
-        source={iconSource}
-        style={{ width: size, height: size, borderRadius: Math.round(size * 0.22) }}
-        contentFit="contain"
-      />
+      <Image source={iconSource} style={{ width: size, height: size }} contentFit="contain" />
     </View>
   );
 }

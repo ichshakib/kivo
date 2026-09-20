@@ -104,7 +104,9 @@ export async function signInWithGoogle(): Promise<GoogleAuthResult> {
     }
 
     const genericMessage =
-      error instanceof Error ? error.message : 'An unexpected error occurred during Google sign in.';
+      error instanceof Error
+        ? error.message
+        : 'An unexpected error occurred during Google sign in.';
     return { success: false, error: genericMessage };
   }
 }

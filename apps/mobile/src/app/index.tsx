@@ -1,4 +1,4 @@
-import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
@@ -34,13 +34,13 @@ export default function AuthScreen() {
 
   useEffect(() => {
     if (user) {
-      router.replace('/editor');
+      router.replace('/home');
     }
   }, [user, router]);
 
   const handleContinue = () => {
-    // Navigate to editor
-    router.push('/editor');
+    // Navigate to home page
+    router.push('/home');
   };
 
   const handleOAuthLogin = async (provider: string) => {
@@ -48,7 +48,7 @@ export default function AuthScreen() {
       try {
         const result = await signInWithGoogle();
         if (result.success) {
-          router.push('/editor');
+          router.push('/home');
         } else if (result.error && !result.cancelled) {
           Alert.alert('Google Sign-In', result.error);
         }
@@ -58,8 +58,8 @@ export default function AuthScreen() {
       }
       return;
     }
-    // Auth provider placeholder -> routes to editor
-    router.push('/editor');
+    // Auth provider placeholder -> routes to home page
+    router.push('/home');
   };
 
   // Exact theme palette aligned with desktop app design
@@ -137,9 +137,7 @@ export default function AuthScreen() {
             entering={FadeInDown.duration(600).delay(200)}
             style={styles.headerContainer}
           >
-            <Text style={[styles.title, { color: colors.title }]}>
-              Your AI workspace.
-            </Text>
+            <Text style={[styles.title, { color: colors.title }]}>Your AI workspace.</Text>
             <Text style={[styles.subtitle, { color: colors.subtitle }]}>
               Log in to your Kivo account
             </Text>
@@ -218,17 +216,12 @@ export default function AuthScreen() {
                 ]}
               >
                 {isGoogleSigningIn ? (
-                  <ActivityIndicator
-                    size="small"
-                    color="#0085FF"
-                    style={styles.oauthIcon}
-                  />
+                  <ActivityIndicator size="small" color="#0085FF" style={styles.oauthIcon} />
                 ) : (
-                  <AntDesign
-                    name="google"
-                    size={20}
-                    color="#EA4335"
+                  <Image
+                    source={require('@/assets/icons/google.png')}
                     style={styles.oauthIcon}
+                    contentFit="contain"
                   />
                 )}
                 <Text style={[styles.oauthButtonText, { color: colors.btnText }]}>
@@ -248,15 +241,8 @@ export default function AuthScreen() {
                   },
                 ]}
               >
-                <Ionicons
-                  name="logo-apple"
-                  size={20}
-                  color={iconColor}
-                  style={styles.oauthIcon}
-                />
-                <Text style={[styles.oauthButtonText, { color: colors.btnText }]}>
-                  Apple
-                </Text>
+                <Ionicons name="logo-apple" size={20} color={iconColor} style={styles.oauthIcon} />
+                <Text style={[styles.oauthButtonText, { color: colors.btnText }]}>Apple</Text>
               </TouchableOpacity>
 
               {/* Microsoft */}
@@ -277,9 +263,7 @@ export default function AuthScreen() {
                   <View style={[styles.msSquare, { backgroundColor: '#00A4EF' }]} />
                   <View style={[styles.msSquare, { backgroundColor: '#FFB900' }]} />
                 </View>
-                <Text style={[styles.oauthButtonText, { color: colors.btnText }]}>
-                  Microsoft
-                </Text>
+                <Text style={[styles.oauthButtonText, { color: colors.btnText }]}>Microsoft</Text>
               </TouchableOpacity>
             </View>
 
@@ -297,15 +281,8 @@ export default function AuthScreen() {
                   },
                 ]}
               >
-                <Ionicons
-                  name="key-outline"
-                  size={19}
-                  color={iconColor}
-                  style={styles.oauthIcon}
-                />
-                <Text style={[styles.oauthButtonText, { color: colors.btnText }]}>
-                  Passkey
-                </Text>
+                <Ionicons name="key-outline" size={19} color={iconColor} style={styles.oauthIcon} />
+                <Text style={[styles.oauthButtonText, { color: colors.btnText }]}>Passkey</Text>
               </TouchableOpacity>
 
               {/* SSO */}
@@ -326,9 +303,7 @@ export default function AuthScreen() {
                   color={iconColor}
                   style={styles.oauthIcon}
                 />
-                <Text style={[styles.oauthButtonText, { color: colors.btnText }]}>
-                  SSO
-                </Text>
+                <Text style={[styles.oauthButtonText, { color: colors.btnText }]}>SSO</Text>
               </TouchableOpacity>
             </View>
           </Animated.View>
@@ -340,17 +315,11 @@ export default function AuthScreen() {
           >
             <Text style={[styles.footerText, { color: colors.footerText }]}>
               By continuing, you acknowledge that you understand and agree to the{' '}
-              <Text
-                style={[styles.footerLink, { color: colors.footerLink }]}
-                onPress={() => {}}
-              >
+              <Text style={[styles.footerLink, { color: colors.footerLink }]} onPress={() => {}}>
                 Terms &amp; Conditions
               </Text>{' '}
               and{' '}
-              <Text
-                style={[styles.footerLink, { color: colors.footerLink }]}
-                onPress={() => {}}
-              >
+              <Text style={[styles.footerLink, { color: colors.footerLink }]} onPress={() => {}}>
                 Privacy Policy
               </Text>
             </Text>

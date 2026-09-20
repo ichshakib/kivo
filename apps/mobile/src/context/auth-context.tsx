@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { type User } from '@react-native-google-signin/google-signin';
 import {
   getCurrentGoogleUser,
@@ -13,6 +7,7 @@ import {
   signOutGoogle as googleSignOutService,
   type GoogleAuthResult,
 } from '@/services/google-auth';
+import { syncGoogleAuthWithBackend, notifyBackendLogout } from '@/services/api-client';
 
 export type AuthUser = User['user'];
 
@@ -83,6 +78,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (result.idToken) {
           setIdToken(result.idToken);
         }
+
+        // Asynchronously notify & sync with backend API for server logging
+        syncGoogleAuthWithBackend(result.user, result.idToken).catch((err) => {
+          console.warn('Backend sync warning:', err);
+        });
       } else if (result.error && !result.cancelled) {
         setError(result.error);
       }
@@ -99,6 +99,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signOut = useCallback(async (): Promise<void> => {
     setIsLoading(true);
     try {
+      // Notify backend of logout for server-side logging
+      await notifyBackendLogout(user);
       await googleSignOutService();
       setUser(null);
       setIdToken(null);
@@ -108,7 +110,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [user]);
 
   const clearError = useCallback(() => {
     setError(null);
