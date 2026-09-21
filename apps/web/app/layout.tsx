@@ -5,6 +5,7 @@ import { Footer } from '@/components/blocks/footer';
 import { Navbar } from '@/components/blocks/navbar';
 import { StyleGlideProvider } from '@/components/styleglide-provider';
 import { ThemeProvider } from '@/components/theme-provider';
+import { AuthProvider } from '@/lib/auth-context';
 import './globals.css';
 
 const dmSans = DM_Sans({
@@ -59,10 +60,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <StyleGlideProvider />
-          <Navbar />
-          <main className="">{children}</main>
-          <Footer />
+          <AuthProvider>
+            <StyleGlideProvider />
+            <Navbar />
+            <main className="">{children}</main>
+            <Footer />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

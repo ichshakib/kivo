@@ -1,6 +1,6 @@
 export interface AppUser {
   id: string;
-  googleId: string;
+  googleId?: string;
   email: string;
   name: string;
   firstName?: string;

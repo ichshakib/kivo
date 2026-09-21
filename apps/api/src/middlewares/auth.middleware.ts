@@ -2,11 +2,12 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { ENV } from '../config/env';
 import { users } from '../config/passport';
+import { User } from '../types/user';
 import { ApiError } from '../utils/ApiError';
 
 export function ensureAuthenticated(req: Request, _res: Response, next: NextFunction): void {
   // 1. Check Passport session authentication
-  if (req.isAuthenticated && req.isAuthenticated()) {
+  if (req.isAuthenticated && req.isAuthenticated() && req.user) {
     return next();
   }
 
@@ -18,11 +19,25 @@ export function ensureAuthenticated(req: Request, _res: Response, next: NextFunc
       try {
         const decoded = jwt.verify(token, ENV.JWT_SECRET) as {
           id: string;
-          email: string;
+          email?: string;
+          name?: string;
         };
         const user = users.get(decoded.id);
         if (user) {
           req.user = user;
+          return next();
+        } else if (decoded.id) {
+          const reconstructedUser: User = {
+            id: decoded.id,
+            googleId: decoded.id,
+            email: decoded.email || '',
+            name: decoded.name || decoded.email?.split('@')[0] || 'User',
+            provider: 'google',
+            createdAt: new Date().toISOString(),
+            lastLoginAt: new Date().toISOString(),
+          };
+          users.set(decoded.id, reconstructedUser);
+          req.user = reconstructedUser;
           return next();
         }
       } catch {

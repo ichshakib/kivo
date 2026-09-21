@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
 import { ENV } from '../config/env';
+import { users } from '../config/passport';
 import { User } from '../types/user';
 import { ApiError } from '../utils/ApiError';
 import { ApiResponse } from '../utils/ApiResponse';
@@ -13,14 +14,35 @@ export const authController = {
   mobileGoogleLogin: asyncHandler(async (req: Request, res: Response) => {
     const { user, idToken } = req.body;
 
+    const email = user?.email || '';
+    const name = user?.name || email.split('@')[0] || 'Mobile User';
+    const avatar = user?.photo || user?.avatar || '';
+    const id = user?.id || `usr_mob_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
+
+    const appUser: User = {
+      id,
+      googleId: user?.id || '',
+      email,
+      name,
+      firstName: user?.givenName,
+      lastName: user?.familyName,
+      avatar,
+      provider: 'google',
+      createdAt: new Date().toISOString(),
+      lastLoginAt: new Date().toISOString(),
+    };
+
+    users.set(appUser.id, appUser);
+
     logger.info(
       `[Auth] Mobile Google Sign-In: ${JSON.stringify(
         {
-          id: user?.id,
-          email: user?.email,
-          name: user?.name,
-          photo: user?.photo,
+          id: appUser.id,
+          email: appUser.email,
+          name: appUser.name,
+          avatar: appUser.avatar,
           hasIdToken: Boolean(idToken),
+          ip: req.ip || req.socket.remoteAddress,
           timestamp: new Date().toISOString(),
         },
         null,
@@ -30,9 +52,9 @@ export const authController = {
 
     const token = jwt.sign(
       {
-        id: user?.id || 'mobile-user',
-        email: user?.email || '',
-        name: user?.name || '',
+        id: appUser.id,
+        email: appUser.email,
+        name: appUser.name,
       },
       ENV.JWT_SECRET,
       { expiresIn: '7d' }
@@ -42,7 +64,7 @@ export const authController = {
       new ApiResponse(
         200,
         {
-          user: user || { id: 'mobile-user', email: user?.email, name: user?.name },
+          user: appUser,
           token,
         },
         'Mobile Google login logged and authenticated successfully'
@@ -50,7 +72,72 @@ export const authController = {
     );
   }),
 
-  // 2. Initiate Google OAuth (Web/Browser)
+  // 2. Web Google Direct Auth / Sync endpoint
+  webGoogleLogin: asyncHandler(async (req: Request, res: Response) => {
+    const { user, idToken, credential } = req.body;
+
+    const email = user?.email || '';
+    const name = user?.name || email.split('@')[0] || 'Web User';
+    const avatar = user?.avatar || user?.picture || user?.photo || '';
+    const id = user?.id || `usr_web_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
+    const googleId = user?.googleId || user?.id || '';
+
+    const appUser: User = {
+      id,
+      googleId,
+      email,
+      name,
+      firstName: user?.given_name || user?.firstName,
+      lastName: user?.family_name || user?.lastName,
+      avatar,
+      provider: 'google',
+      createdAt: user?.createdAt || new Date().toISOString(),
+      lastLoginAt: new Date().toISOString(),
+    };
+
+    users.set(appUser.id, appUser);
+
+    logger.info(
+      `[Auth] Web Google Sign-In: ${JSON.stringify(
+        {
+          id: appUser.id,
+          googleId: appUser.googleId,
+          email: appUser.email,
+          name: appUser.name,
+          avatar: appUser.avatar,
+          hasIdToken: Boolean(idToken || credential),
+          ip: req.ip || req.socket.remoteAddress,
+          userAgent: req.headers['user-agent'],
+          timestamp: new Date().toISOString(),
+        },
+        null,
+        2
+      )}`
+    );
+
+    const token = jwt.sign(
+      {
+        id: appUser.id,
+        email: appUser.email,
+        name: appUser.name,
+      },
+      ENV.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    return res.status(200).json(
+      new ApiResponse(
+        200,
+        {
+          user: appUser,
+          token,
+        },
+        'Web Google login logged and authenticated successfully'
+      )
+    );
+  }),
+
+  // 3. Initiate Google OAuth (Web/Browser)
   googleLogin: (req: Request, res: Response, next: NextFunction) => {
     if (!ENV.GOOGLE.CLIENT_ID || !ENV.GOOGLE.CLIENT_SECRET) {
       return next(
@@ -63,31 +150,43 @@ export const authController = {
     })(req, res, next);
   },
 
-  // 3. Google OAuth Callback (Web/Browser)
+  // 4. Google OAuth Callback (Web/Browser)
   googleCallback: (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate('google', (err: Error | null, user: User | false) => {
       if (err) {
+        logger.error(`[Auth] Google OAuth callback error: ${err.message}`);
         return next(err);
       }
       if (!user) {
+        logger.warn('[Auth] Google OAuth failed: No user returned');
         return res.redirect(`${ENV.CLIENT_URL}/login?error=auth_failed`);
       }
 
       req.logIn(user, (loginErr) => {
         if (loginErr) {
+          logger.error(`[Auth] Session login error: ${loginErr.message}`);
           return next(loginErr);
         }
 
         logger.info(
-          `[Auth] Web Google OAuth callback: ${JSON.stringify({
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            timestamp: new Date().toISOString(),
-          })}`
+          `[Auth] Web Google OAuth Sign-In: ${JSON.stringify(
+            {
+              id: user.id,
+              googleId: user.googleId,
+              email: user.email,
+              name: user.name,
+              avatar: user.avatar,
+              provider: user.provider,
+              ip: req.ip || req.socket.remoteAddress,
+              userAgent: req.headers['user-agent'],
+              timestamp: new Date().toISOString(),
+            },
+            null,
+            2
+          )}`
         );
 
-        // Generate JWT token for cross-platform / mobile app clients
+        // Generate JWT token for cross-platform / web clients
         const token = jwt.sign(
           {
             id: user.id,
@@ -118,14 +217,16 @@ export const authController = {
 
         // Redirect to Web/Client app with auth token
         const redirectUrl = new URL(ENV.CLIENT_URL);
+        redirectUrl.pathname = '/login';
         redirectUrl.searchParams.set('token', token);
         redirectUrl.searchParams.set('userId', user.id);
+        redirectUrl.searchParams.set('auth', 'success');
         return res.redirect(redirectUrl.toString());
       });
     })(req, res, next);
   },
 
-  // 4. Get Current User Profile
+  // 5. Get Current User Profile
   getMe: asyncHandler(async (req: Request, res: Response) => {
     if (!req.user) {
       throw new ApiError(401, 'Unauthorized: No active session');
@@ -143,16 +244,22 @@ export const authController = {
     );
   }),
 
-  // 5. Logout User
+  // 6. Logout User
   logout: (req: Request, res: Response, next: NextFunction) => {
     const userIdentifier =
-      req.user || req.body?.user || req.body?.email || req.body?.userId || 'Mobile/Web Client';
+      req.user || req.body?.user || req.body?.email || req.body?.userId || 'Web/Mobile Client';
 
     logger.info(
-      `[Auth] Account logged out: ${JSON.stringify({
-        user: userIdentifier,
-        timestamp: new Date().toISOString(),
-      })}`
+      `[Auth] Account Logged Out: ${JSON.stringify(
+        {
+          user: userIdentifier,
+          ip: req.ip || req.socket.remoteAddress,
+          userAgent: req.headers['user-agent'],
+          timestamp: new Date().toISOString(),
+        },
+        null,
+        2
+      )}`
     );
 
     req.logout((err) => {
@@ -169,7 +276,7 @@ export const authController = {
     });
   },
 
-  // 5. Auth Service Status
+  // 7. Auth Service Status
   getStatus: asyncHandler(async (_req: Request, res: Response) => {
     return res.status(200).json(
       new ApiResponse(

@@ -19,6 +19,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu';
+import { useAuth } from '@/lib/auth-context';
 import { cn } from '@/lib/utils';
 
 const ITEMS = [
@@ -45,6 +46,7 @@ const ITEMS = [
 ];
 
 export const Navbar = () => {
+  const { user, signOut } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const pathname = usePathname();
@@ -112,11 +114,41 @@ export const Navbar = () => {
         {/* Auth Buttons */}
         <div className="flex items-center gap-2.5">
           <ThemeToggle />
-          <Link href="/login" className="max-lg:hidden">
-            <Button variant="outline">
-              <span className="relative z-10">Login</span>
-            </Button>
-          </Link>
+          {user ? (
+            <div className="flex items-center gap-2 max-lg:hidden">
+              <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-muted/60 border border-border text-xs">
+                {user.avatar ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={user.avatar}
+                    alt={user.name || 'User avatar'}
+                    className="size-5 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="size-5 rounded-full bg-[#0085FF] text-white flex items-center justify-center font-bold text-[10px]">
+                    {(user.name || user.email || 'U').charAt(0).toUpperCase()}
+                  </div>
+                )}
+                <span className="font-medium text-foreground max-w-[120px] truncate">
+                  {user.name || user.email}
+                </span>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => signOut()}
+                className="text-xs h-8 px-2.5"
+              >
+                Sign out
+              </Button>
+            </div>
+          ) : (
+            <Link href="/login" className="max-lg:hidden">
+              <Button variant="outline">
+                <span className="relative z-10">Login</span>
+              </Button>
+            </Link>
+          )}
           <a
             href="https://github.com/shadcnblocks/mainline-nextjs-template"
             className="text-muted-foreground hover:text-foreground transition-colors"
@@ -215,6 +247,48 @@ export const Navbar = () => {
               </Link>
             )
           )}
+
+          {/* Mobile Auth Button */}
+          <div className="py-4 first:pt-0 last:pb-0">
+            {user ? (
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  {user.avatar ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={user.avatar}
+                      alt={user.name || 'User avatar'}
+                      className="size-8 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="size-8 rounded-full bg-[#0085FF] text-white flex items-center justify-center font-bold text-xs">
+                      {(user.name || user.email || 'U').charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-sm text-foreground">{user.name}</span>
+                    <span className="text-xs text-muted-foreground">{user.email}</span>
+                  </div>
+                </div>
+                <Button
+                  variant="outline"
+                  className="w-full text-xs"
+                  onClick={() => {
+                    signOut();
+                    setIsMenuOpen(false);
+                  }}
+                >
+                  Sign out
+                </Button>
+              </div>
+            ) : (
+              <Link href="/login" onClick={() => setIsMenuOpen(false)} className="block w-full">
+                <Button className="w-full bg-[#0085FF] hover:bg-[#0073e6] text-white">
+                  Login / Sign in
+                </Button>
+              </Link>
+            )}
+          </div>
         </nav>
       </div>
     </section>
