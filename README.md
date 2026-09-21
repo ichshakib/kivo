@@ -22,7 +22,7 @@
 
 ## 📌 Overview
 
-**Kivo** is an enterprise-grade fullstack ecosystem engineered with **Turborepo** and **pnpm workspaces**. It brings together web applications, native desktop applications, cross-platform mobile apps, developer documentation portals, shared UI design systems, and modular backend API services in a unified, type-safe repository.
+**Kivo** is an enterprise-grade fullstack ecosystem engineered with **Turborepo** and **pnpm workspaces**. It brings together web applications, native desktop applications, cross-platform mobile apps, shared UI design systems, and modular backend API services (with PostgreSQL pooling, Google GenAI Gemini, and S3 object storage) in a unified, type-safe repository.
 
 ---
 
@@ -34,8 +34,7 @@ kivo/
 │   ├── web/               # Next.js 16 Web Application with Tailwind CSS v4 & Lucide (Port 3000)
 │   ├── desktop/           # Electron 30 + Vite + React 19 Desktop Client
 │   ├── mobile/            # Expo SDK 57 & React Native Mobile App (iOS / Android / Web)
-│   ├── docs/              # Next.js 16 Documentation Portal (Port 3001)
-│   └── api/               # Express 5 + Winston/Morgan + Passport.js Google OAuth Backend Service
+│   └── api/               # Express 5 + PostgreSQL (pg) + Gemini AI + S3 Storage + Google OAuth (Port 5000)
 ├── packages/
 │   ├── ui/                # Shared 60+ shadcn UI Component Library (@repo/ui)
 │   ├── typescript-config/ # Monorepo TypeScript presets (@repo/typescript-config)
@@ -51,13 +50,12 @@ kivo/
 
 ### 📱 Applications
 
-| Application   | Technology Stack                                   | Description                                            | Dev Command                  | Port / Output           |
-| :------------ | :------------------------------------------------- | :----------------------------------------------------- | :--------------------------- | :---------------------- |
-| **`web`**     | Next.js 16 (App Router), React 19, Tailwind CSS v4 | High-performance responsive web client                 | `pnpm --filter web dev`      | `http://localhost:3000` |
-| **`desktop`** | Electron 30, Vite 5, React 19, Tailwind CSS v4     | Native cross-platform desktop application              | `pnpm --filter desktop dev`  | Electron Desktop Window |
-| **`mobile`**  | Expo SDK 57, React Native 0.86, Expo Router        | Cross-platform mobile app (iOS, Android, Web)          | `pnpm --filter mobile start` | Expo Metro Bundler      |
-| **`docs`**    | Next.js 16 (App Router), React 19                  | Product, architecture, and developer documentation     | `pnpm --filter docs dev`     | `http://localhost:3001` |
-| **`api`**     | Express 5, TypeScript, Winston/Morgan, Passport.js | REST API service with Google OAuth & Vercel serverless | `pnpm --filter api dev`      | `http://localhost:5000` |
+| Application   | Technology Stack                                                                      | Description                                                                      | Dev Command                  | Port / Output           |
+| :------------ | :------------------------------------------------------------------------------------ | :------------------------------------------------------------------------------- | :--------------------------- | :---------------------- |
+| **`web`**     | Next.js 16 (App Router), React 19, Tailwind CSS v4                                    | High-performance responsive web client                                           | `pnpm --filter web dev`      | `http://localhost:3000` |
+| **`desktop`** | Electron 30, Vite 5, React 19, Tailwind CSS v4                                        | Native cross-platform desktop application                                        | `pnpm --filter desktop dev`  | Electron Desktop Window |
+| **`mobile`**  | Expo SDK 57, React Native 0.86, Expo Router                                           | Cross-platform mobile app (iOS, Android, Web)                                    | `pnpm --filter mobile start` | Expo Metro Bundler      |
+| **`api`**     | Express 5, PostgreSQL (`pg`), Google GenAI (`@google/genai`), AWS S3 SDK, Passport.js | REST API service with database pooling, Gemini AI text/streaming, and S3 storage | `pnpm --filter api dev`      | `http://localhost:5000` |
 
 ### 📦 Shared Packages
 
@@ -110,9 +108,6 @@ pnpm --filter desktop dev
 
 # Start Mobile app
 pnpm --filter mobile start
-
-# Start Documentation
-pnpm --filter docs dev
 
 # Start Backend API
 pnpm --filter api dev

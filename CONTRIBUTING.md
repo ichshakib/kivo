@@ -22,8 +22,7 @@ kivo/
 │   ├── web/               # Next.js 16 Web App (Tailwind CSS v4)
 │   ├── desktop/           # Electron 30 + Vite + React 19 App
 │   ├── mobile/            # Expo SDK 57 + React Native App
-│   ├── docs/              # Next.js 16 Documentation Portal
-│   └── api/               # Express 5 REST API & Google OAuth Service
+│   └── api/               # Express 5 REST API (PostgreSQL, Gemini AI, S3 Storage)
 └── packages/
     ├── ui/                # Shared 60+ shadcn UI components (@repo/ui)
     ├── typescript-config/ # TypeScript shared configs (@repo/typescript-config)
@@ -69,7 +68,6 @@ pnpm dev
 pnpm --filter web dev        # Web Client (http://localhost:3000)
 pnpm --filter desktop dev    # Desktop App (Electron window)
 pnpm --filter mobile start   # Mobile App (Expo Metro)
-pnpm --filter docs dev       # Docs Portal (http://localhost:3001)
 pnpm --filter api dev        # Backend API (http://localhost:5000)
 ```
 
