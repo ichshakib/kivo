@@ -22,7 +22,23 @@ export const ENV = {
   GEMINI: {
     API_KEY: process.env.GEMINI_API_KEY || process.env.GOOGLE_GENAI_API_KEY || '',
   },
+  STORAGE: {
+    ENDPOINT: process.env.AWS_ENDPOINT_URL_S3 || process.env.S3_ENDPOINT || '',
+    ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID || '',
+    SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY || '',
+    REGION: process.env.AWS_REGION || 'ap-southeast-1',
+    BUCKET: process.env.AWS_BUCKET_NAME || process.env.S3_BUCKET || 'kivo',
+  },
 };
 
-export const { PORT, NODE_ENV, CLIENT_URL, SESSION_SECRET, JWT_SECRET, GOOGLE, DATABASE, GEMINI } =
-  ENV;
+export const {
+  PORT,
+  NODE_ENV,
+  CLIENT_URL,
+  SESSION_SECRET,
+  JWT_SECRET,
+  GOOGLE,
+  DATABASE,
+  GEMINI,
+  STORAGE,
+} = ENV;

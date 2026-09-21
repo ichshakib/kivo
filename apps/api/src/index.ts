@@ -1,6 +1,7 @@
 import { app } from './app';
 import { ENV } from './config/env';
 import { testDatabaseConnection } from './config/database';
+import { storageService } from './services/storage.service';
 import logger from './logger/winston.logger';
 
 export const startServer = () => {
@@ -9,6 +10,7 @@ export const startServer = () => {
       logger.info(`🚀 Kivo API server running on http://localhost:${ENV.PORT}`);
       logger.info(`🔑 Google Auth Endpoint: http://localhost:${ENV.PORT}/api/auth/google`);
       logger.info(`🤖 AI Endpoints: http://localhost:${ENV.PORT}/api/ai`);
+      logger.info(`📦 Storage Endpoints: http://localhost:${ENV.PORT}/api/storage`);
       logger.info(`🩺 Health Check: http://localhost:${ENV.PORT}/api/health`);
 
       if (ENV.DATABASE.URL) {
@@ -17,6 +19,17 @@ export const startServer = () => {
           logger.info(`🗄️ PostgreSQL database connected successfully (${dbStatus.latencyMs}ms)`);
         } else {
           logger.warn(`⚠️ PostgreSQL connection warning: ${dbStatus.error}`);
+        }
+      }
+
+      if (ENV.STORAGE.ACCESS_KEY_ID && ENV.STORAGE.SECRET_ACCESS_KEY) {
+        const storageStatus = await storageService.testStorageConnection();
+        if (storageStatus.connected) {
+          logger.info(
+            `📦 S3 Storage bucket '${storageStatus.bucket}' verified successfully (${storageStatus.latencyMs}ms)`
+          );
+        } else {
+          logger.warn(`⚠️ Storage connection warning: ${storageStatus.error}`);
         }
       }
     });

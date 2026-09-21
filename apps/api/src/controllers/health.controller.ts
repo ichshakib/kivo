@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { asyncHandler } from '../utils/asyncHandler';
 import { ApiResponse } from '../utils/ApiResponse';
 import { testDatabaseConnection } from '../config/database';
+import { storageService } from '../services/storage.service';
 import { ENV } from '../config/env';
 
 export const getHealth = asyncHandler(async (_req: Request, res: Response) => {
@@ -9,8 +10,16 @@ export const getHealth = asyncHandler(async (_req: Request, res: Response) => {
     connected: false,
   };
 
+  let storageStatus: { connected: boolean; bucket?: string; latencyMs?: number; error?: string } = {
+    connected: false,
+  };
+
   if (ENV.DATABASE.URL) {
     dbStatus = await testDatabaseConnection();
+  }
+
+  if (ENV.STORAGE.ACCESS_KEY_ID && ENV.STORAGE.SECRET_ACCESS_KEY) {
+    storageStatus = await storageService.testStorageConnection();
   }
 
   return res.status(200).json(
@@ -25,6 +34,13 @@ export const getHealth = asyncHandler(async (_req: Request, res: Response) => {
           connected: dbStatus.connected,
           latencyMs: dbStatus.latencyMs,
           error: dbStatus.error,
+        },
+        storage: {
+          configured: Boolean(ENV.STORAGE.ACCESS_KEY_ID && ENV.STORAGE.SECRET_ACCESS_KEY),
+          bucket: ENV.STORAGE.BUCKET,
+          connected: storageStatus.connected,
+          latencyMs: storageStatus.latencyMs,
+          error: storageStatus.error,
         },
       },
       'API service is healthy'
