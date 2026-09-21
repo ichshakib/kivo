@@ -1,5 +1,11 @@
 import { Request, Response } from 'express';
-import { storageService } from '../services/storage.service';
+import {
+  testStorageConnection,
+  getPresignedDownloadUrl as getDownloadUrlService,
+  getPresignedUploadUrl as getUploadUrlService,
+  uploadFile as uploadFileService,
+  deleteFile as deleteFileService,
+} from '../services/storage';
 import { ApiResponse } from '../utils/ApiResponse';
 import { ApiError } from '../utils/ApiError';
 import { asyncHandler } from '../utils/asyncHandler';
@@ -16,7 +22,7 @@ export const getStorageStatus = asyncHandler(async (_req: Request, res: Response
   };
 
   if (isConfigured) {
-    connectionStatus = await storageService.testStorageConnection();
+    connectionStatus = await testStorageConnection();
   }
 
   return res.status(200).json(
@@ -46,7 +52,7 @@ export const getPresignedDownloadUrl = asyncHandler(async (req: Request, res: Re
     throw new ApiError(400, 'Field "key" is required and must be a string.');
   }
 
-  const url = await storageService.getPresignedDownloadUrl({
+  const url = await getDownloadUrlService({
     key,
     expiresIn: expiresIn ? Number(expiresIn) : 3600,
     bucket,
@@ -76,7 +82,7 @@ export const getPresignedUploadUrl = asyncHandler(async (req: Request, res: Resp
     throw new ApiError(400, 'Field "key" is required and must be a string.');
   }
 
-  const result = await storageService.getPresignedUploadUrl({
+  const result = await getUploadUrlService({
     key,
     expiresIn: expiresIn ? Number(expiresIn) : 3600,
     contentType: contentType || 'application/octet-stream',
@@ -104,7 +110,7 @@ export const uploadFile = asyncHandler(async (req: Request, res: Response) => {
 
   const body = typeof content === 'string' ? content : JSON.stringify(content);
 
-  const result = await storageService.uploadFile({
+  const result = await uploadFileService({
     key,
     body,
     contentType: contentType || 'text/plain',
@@ -124,7 +130,7 @@ export const deleteFile = asyncHandler(async (req: Request, res: Response) => {
     throw new ApiError(400, 'Field "key" is required and must be a string.');
   }
 
-  await storageService.deleteFile(key, bucket);
+  await deleteFileService(key, bucket);
 
   return res
     .status(200)

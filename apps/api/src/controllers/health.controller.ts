@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { asyncHandler } from '../utils/asyncHandler';
 import { ApiResponse } from '../utils/ApiResponse';
 import { testDatabaseConnection } from '../config/database';
-import { storageService } from '../services/storage.service';
+import { testStorageConnection } from '../services/storage';
 import { ENV } from '../config/env';
 
 export const getHealth = asyncHandler(async (_req: Request, res: Response) => {
@@ -19,7 +19,7 @@ export const getHealth = asyncHandler(async (_req: Request, res: Response) => {
   }
 
   if (ENV.STORAGE.ACCESS_KEY_ID && ENV.STORAGE.SECRET_ACCESS_KEY) {
-    storageStatus = await storageService.testStorageConnection();
+    storageStatus = await testStorageConnection();
   }
 
   return res.status(200).json(

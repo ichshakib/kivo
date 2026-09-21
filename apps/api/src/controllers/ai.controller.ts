@@ -1,5 +1,8 @@
 import { Request, Response } from 'express';
-import { aiService } from '../services/ai.service';
+import {
+  generateText as generateTextService,
+  streamText as streamTextService,
+} from '../services/ai';
 import { ApiResponse } from '../utils/ApiResponse';
 import { ApiError } from '../utils/ApiError';
 import { asyncHandler } from '../utils/asyncHandler';
@@ -24,7 +27,7 @@ export const generateText = asyncHandler(async (req: Request, res: Response) => 
     throw new ApiError(400, 'Field "prompt" is required and must be a string.');
   }
 
-  const result = await aiService.generateText({
+  const result = await generateTextService({
     prompt,
     model,
     systemInstruction,
@@ -55,7 +58,7 @@ export const streamText = asyncHandler(async (req: Request, res: Response) => {
     throw new ApiError(400, 'Field "prompt" is required and must be a string.');
   }
 
-  const stream = await aiService.streamText({
+  const stream = await streamTextService({
     prompt,
     model,
     systemInstruction,

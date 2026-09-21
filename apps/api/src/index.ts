@@ -1,7 +1,7 @@
 import { app } from './app';
 import { ENV } from './config/env';
 import { testDatabaseConnection } from './config/database';
-import { storageService } from './services/storage.service';
+import { testStorageConnection } from './services/storage';
 import logger from './logger/winston.logger';
 
 export const startServer = () => {
@@ -23,7 +23,7 @@ export const startServer = () => {
       }
 
       if (ENV.STORAGE.ACCESS_KEY_ID && ENV.STORAGE.SECRET_ACCESS_KEY) {
-        const storageStatus = await storageService.testStorageConnection();
+        const storageStatus = await testStorageConnection();
         if (storageStatus.connected) {
           logger.info(
             `📦 S3 Storage bucket '${storageStatus.bucket}' verified successfully (${storageStatus.latencyMs}ms)`
