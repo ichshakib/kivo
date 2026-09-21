@@ -16,10 +16,13 @@ export const ENV = {
     CALLBACK_URL:
       process.env.GOOGLE_CALLBACK_URL || 'http://localhost:5000/api/auth/google/callback',
   },
+  DATABASE: {
+    URL: process.env.DATABASE_URL || '',
+  },
   GEMINI: {
     API_KEY: process.env.GEMINI_API_KEY || process.env.GOOGLE_GENAI_API_KEY || '',
-    DEFAULT_MODEL: process.env.GEMINI_MODEL || 'gemini-3.8-flash',
   },
 };
 
-export const { PORT, NODE_ENV, CLIENT_URL, SESSION_SECRET, JWT_SECRET, GOOGLE, GEMINI } = ENV;
+export const { PORT, NODE_ENV, CLIENT_URL, SESSION_SECRET, JWT_SECRET, GOOGLE, DATABASE, GEMINI } =
+  ENV;

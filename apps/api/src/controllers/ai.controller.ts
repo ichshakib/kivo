@@ -4,6 +4,7 @@ import { ApiResponse } from '../utils/ApiResponse';
 import { ApiError } from '../utils/ApiError';
 import { asyncHandler } from '../utils/asyncHandler';
 import { ENV } from '../config/env';
+import { DEFAULT_GEMINI_MODEL, SUPPORTED_GEMINI_MODELS } from '../constants/ai.constants';
 
 /**
  * Controller for generating text using Gemini AI models.
@@ -11,7 +12,7 @@ import { ENV } from '../config/env';
 export const generateText = asyncHandler(async (req: Request, res: Response) => {
   const {
     prompt,
-    model = ENV.GEMINI.DEFAULT_MODEL,
+    model = DEFAULT_GEMINI_MODEL,
     systemInstruction,
     thinkingLevel,
     temperature,
@@ -42,7 +43,7 @@ export const generateText = asyncHandler(async (req: Request, res: Response) => 
 export const streamText = asyncHandler(async (req: Request, res: Response) => {
   const {
     prompt,
-    model = ENV.GEMINI.DEFAULT_MODEL,
+    model = DEFAULT_GEMINI_MODEL,
     systemInstruction,
     thinkingLevel,
     temperature,
@@ -101,13 +102,8 @@ export const getAiStatus = asyncHandler(async (_req: Request, res: Response) => 
       200,
       {
         configured: isConfigured,
-        defaultModel: ENV.GEMINI.DEFAULT_MODEL,
-        supportedModels: [
-          'gemini-3.8-flash',
-          'gemini-3.8-flash-lite',
-          'gemini-2.5-flash',
-          'gemini-2.5-pro',
-        ],
+        defaultModel: DEFAULT_GEMINI_MODEL,
+        supportedModels: SUPPORTED_GEMINI_MODELS,
       },
       'AI status retrieved successfully'
     )

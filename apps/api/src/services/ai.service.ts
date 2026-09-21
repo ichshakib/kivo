@@ -1,5 +1,6 @@
 import { GoogleGenAI } from '@google/genai';
 import { ENV } from '../config/env';
+import { DEFAULT_GEMINI_MODEL } from '../constants/ai.constants';
 import { ApiError } from '../utils/ApiError';
 import logger from '../logger/winston.logger';
 
@@ -46,7 +47,7 @@ export class AiService {
   async generateText(options: GenerateTextOptions): Promise<GenerateTextResult> {
     const {
       prompt,
-      model = ENV.GEMINI.DEFAULT_MODEL,
+      model = DEFAULT_GEMINI_MODEL,
       systemInstruction,
       thinkingLevel,
       temperature,
@@ -135,7 +136,7 @@ export class AiService {
   async streamText(options: GenerateTextOptions) {
     const {
       prompt,
-      model = ENV.GEMINI.DEFAULT_MODEL,
+      model = DEFAULT_GEMINI_MODEL,
       systemInstruction,
       thinkingLevel,
       temperature,
