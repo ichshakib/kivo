@@ -1,7 +1,3 @@
-nodeLinker: hoisted
-symlink: false
-packageImportMethod: copy
-confirmModulesPurge: false
 packages:
   - "apps/*"
   - "packages/*"
@@ -18,6 +14,8 @@ minimumReleaseAgeExclude:
   - expo-router@57.0.22
   - expo@57.0.24
 allowBuilds:
+  '@google/genai': true
   electron: true
   esbuild: true
+  protobufjs: true
   unrs-resolver: true
